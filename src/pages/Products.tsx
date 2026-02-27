@@ -1,6 +1,7 @@
 import { useState, useMemo, useEffect } from 'react';
-import { Search, SlidersHorizontal, Grid, List, ChevronLeft, ChevronRight, X, Check } from 'lucide-react';
+import { Search, SlidersHorizontal, Grid, List, ChevronLeft, ChevronRight, X } from 'lucide-react';
 import { useCart } from '../context/CartContext';
+import { useToast } from '../context/ToastContext';
 import CustomDropdown from '../components/CustomDropdown';
 import Input from '../components/Input';
 import { getProducts, getCategories, getSizes, Product as ProductType } from '../services/api';
@@ -14,7 +15,6 @@ export default function Products() {
   const [currentPage, setCurrentPage] = useState(1);
   const [selectedProduct, setSelectedProduct] = useState<ProductType | null>(null);
   const [selectedSize, setSelectedSize] = useState('');
-  const [showNotification, setShowNotification] = useState(false);
   const itemsPerPage = 6;
 
   // Data from API
@@ -24,6 +24,7 @@ export default function Products() {
   const [loading, setLoading] = useState(true);
 
   const { addToCart } = useCart();
+  const toast = useToast();
 
   // Fetch data on mount
   useEffect(() => {
@@ -39,15 +40,17 @@ export default function Products() {
         setAllProducts(productsData);
         setCategories(['All', ...categoriesData.map(cat => cat.name)]);
         setSizes(sizesData);
+        toast.success('Products loaded successfully!');
       } catch (error) {
         console.error('Error fetching data:', error);
+        toast.error('Failed to load products. Please try again.');
       } finally {
         setLoading(false);
       }
     };
 
     fetchData();
-  }, []);
+  }, [toast]);
 
   const filteredAndSortedProducts = useMemo(() => {
     let filtered = allProducts.filter(product => {
@@ -107,8 +110,9 @@ export default function Products() {
       });
       setSelectedProduct(null);
       setSelectedSize('');
-      setShowNotification(true);
-      setTimeout(() => setShowNotification(false), 3000);
+      toast.success(`${selectedProduct.name} added to cart!`);
+    } else if (!selectedSize) {
+      toast.warning('Please select a size first!');
     }
   };
 
@@ -125,14 +129,6 @@ export default function Products() {
 
   return (
     <div className="min-h-screen bg-gray-900 text-white pt-20">
-      {/* Add to Cart Notification */}
-      {showNotification && (
-        <div className="fixed top-20 right-4 z-50 bg-gradient-to-r from-lime-500 to-orange-500 text-black px-6 py-4 rounded-xl shadow-2xl flex items-center gap-3 animate-slide-in">
-          <Check className="w-6 h-6" />
-          <span className="font-semibold">Added to cart successfully!</span>
-        </div>
-      )}
-
       {/* Size Selection Modal */}
       {selectedProduct && (
         <div className="fixed inset-0 bg-black/70 backdrop-blur-sm z-50 flex items-center justify-center p-4">

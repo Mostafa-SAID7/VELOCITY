@@ -1,8 +1,25 @@
-import React from 'react';
+import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { ArrowRight } from 'lucide-react';
+import { useToast } from '../context/ToastContext';
 
 export default function Home() {
+  const [email, setEmail] = useState('');
+  const toast = useToast();
+
+  const handleSubscribe = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!email.trim()) {
+      toast.warning('Please enter your email address');
+      return;
+    }
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+      toast.error('Please enter a valid email address');
+      return;
+    }
+    toast.success('Successfully subscribed to our newsletter!');
+    setEmail('');
+  };
   return (
     <div className="min-h-screen bg-gray-900 text-white">
       <section className="relative h-screen flex items-center justify-center overflow-hidden">
@@ -42,16 +59,21 @@ export default function Home() {
           <p className="text-xl text-black/80 mb-8 max-w-2xl mx-auto">
             Get exclusive access to new releases, training tips, and special offers
           </p>
-          <div className="max-w-md mx-auto flex gap-4">
+          <form onSubmit={handleSubscribe} className="max-w-md mx-auto flex gap-4">
             <input 
               type="email" 
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
               placeholder="Enter your email"
               className="flex-1 px-6 py-4 rounded-full text-black placeholder-gray-500 bg-white/90 backdrop-blur-sm border-0 focus:outline-none focus:ring-4 focus:ring-white/50"
             />
-            <button className="bg-black text-white px-8 py-4 rounded-full font-bold hover:bg-gray-800 transition-colors duration-300">
+            <button 
+              type="submit"
+              className="bg-black text-white px-8 py-4 rounded-full font-bold hover:bg-gray-800 transition-colors duration-300"
+            >
               Subscribe
             </button>
-          </div>
+          </form>
         </div>
       </section>
     </div>

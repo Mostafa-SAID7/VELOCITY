@@ -1,9 +1,27 @@
 import { Trash2, Plus, Minus, ShoppingBag } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { useCart } from '../context/CartContext';
+import { useToast } from '../context/ToastContext';
 
 export default function Cart() {
   const { cartItems, removeFromCart, updateQuantity } = useCart();
+  const toast = useToast();
+
+  const handleRemoveItem = (id: number, name: string) => {
+    removeFromCart(id);
+    toast.success(`${name} removed from cart`);
+  };
+
+  const handleUpdateQuantity = (id: number, quantity: number) => {
+    if (quantity < 1) {
+      const item = cartItems.find(item => item.id === id);
+      if (item) {
+        handleRemoveItem(id, item.name);
+      }
+    } else {
+      updateQuantity(id, quantity);
+    }
+  };
 
   const subtotal = cartItems.reduce((sum, item) => sum + (item.price * item.quantity), 0);
   const shipping = cartItems.length > 0 ? 15 : 0;
@@ -58,14 +76,14 @@ export default function Cart() {
                   <div className="flex items-center gap-4">
                     <div className="flex items-center bg-gray-700 rounded-full">
                       <button 
-                        onClick={() => updateQuantity(item.id, item.quantity - 1)}
+                        onClick={() => handleUpdateQuantity(item.id, item.quantity - 1)}
                         className="p-2 hover:bg-gray-600 rounded-full transition-colors"
                       >
                         <Minus className="w-4 h-4" />
                       </button>
                       <span className="px-4 font-bold">{item.quantity}</span>
                       <button 
-                        onClick={() => updateQuantity(item.id, item.quantity + 1)}
+                        onClick={() => handleUpdateQuantity(item.id, item.quantity + 1)}
                         className="p-2 hover:bg-gray-600 rounded-full transition-colors"
                       >
                         <Plus className="w-4 h-4" />
@@ -73,7 +91,7 @@ export default function Cart() {
                     </div>
 
                     <button 
-                      onClick={() => removeFromCart(item.id)}
+                      onClick={() => handleRemoveItem(item.id, item.name)}
                       className="p-2 hover:bg-red-500/20 rounded-full transition-colors text-red-500"
                     >
                       <Trash2 className="w-5 h-5" />
@@ -108,7 +126,10 @@ export default function Cart() {
                   </div>
                 </div>
 
-                <button className="w-full bg-gradient-to-r from-lime-500 to-orange-500 text-black py-4 rounded-full font-bold hover:shadow-lg hover:shadow-lime-500/25 transition-all duration-300 mb-4">
+                <button 
+                  onClick={() => toast.info('Checkout feature coming soon!')}
+                  className="w-full bg-gradient-to-r from-lime-500 to-orange-500 text-black py-4 rounded-full font-bold hover:shadow-lg hover:shadow-lime-500/25 transition-all duration-300 mb-4"
+                >
                   Proceed to Checkout
                 </button>
 

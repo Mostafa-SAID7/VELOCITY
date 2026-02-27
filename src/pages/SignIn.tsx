@@ -1,7 +1,8 @@
 import { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { Mail, Lock, User } from 'lucide-react';
 import Input from '../components/Input';
+import { useToast } from '../context/ToastContext';
 
 export default function SignIn() {
   const [isSignUp, setIsSignUp] = useState(false);
@@ -10,10 +11,54 @@ export default function SignIn() {
     email: '',
     password: ''
   });
+  const [loading, setLoading] = useState(false);
+  
+  const toast = useToast();
+  const navigate = useNavigate();
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    console.log('Form submitted:', formData);
+    
+    // Validation
+    if (isSignUp && !formData.name.trim()) {
+      toast.warning('Please enter your name');
+      return;
+    }
+    
+    if (!formData.email.trim()) {
+      toast.warning('Please enter your email');
+      return;
+    }
+    
+    if (!formData.password.trim()) {
+      toast.warning('Please enter your password');
+      return;
+    }
+    
+    if (formData.password.length < 6) {
+      toast.warning('Password must be at least 6 characters');
+      return;
+    }
+
+    setLoading(true);
+    
+    // Simulate API call
+    setTimeout(() => {
+      setLoading(false);
+      if (isSignUp) {
+        toast.success('Account created successfully! Welcome to Velocity!');
+      } else {
+        toast.success('Welcome back! Signed in successfully.');
+      }
+      
+      // Reset form
+      setFormData({ name: '', email: '', password: '' });
+      
+      // Navigate to home after 1 second
+      setTimeout(() => {
+        navigate('/');
+      }, 1000);
+    }, 1500);
   };
 
   const handleChange = (field: string, value: string) => {
@@ -89,9 +134,17 @@ export default function SignIn() {
 
               <button
                 type="submit"
-                className="w-full bg-gradient-to-r from-lime-500 to-orange-500 text-black py-4 rounded-full font-bold hover:shadow-lg hover:shadow-lime-500/25 transition-all duration-300"
+                disabled={loading}
+                className="w-full bg-gradient-to-r from-lime-500 to-orange-500 text-black py-4 rounded-full font-bold hover:shadow-lg hover:shadow-lime-500/25 transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed"
               >
-                {isSignUp ? 'Create Account' : 'Sign In'}
+                {loading ? (
+                  <span className="flex items-center justify-center gap-2">
+                    <div className="animate-spin rounded-full h-5 w-5 border-t-2 border-b-2 border-black"></div>
+                    {isSignUp ? 'Creating Account...' : 'Signing In...'}
+                  </span>
+                ) : (
+                  isSignUp ? 'Create Account' : 'Sign In'
+                )}
               </button>
             </form>
 
@@ -118,10 +171,18 @@ export default function SignIn() {
               </div>
 
               <div className="mt-6 grid grid-cols-2 gap-4">
-                <button className="bg-gray-700 hover:bg-gray-600 py-3 rounded-xl font-semibold transition-colors">
+                <button 
+                  type="button"
+                  onClick={() => toast.info('Google sign-in coming soon!')}
+                  className="bg-gray-700 hover:bg-gray-600 py-3 rounded-xl font-semibold transition-colors"
+                >
                   Google
                 </button>
-                <button className="bg-gray-700 hover:bg-gray-600 py-3 rounded-xl font-semibold transition-colors">
+                <button 
+                  type="button"
+                  onClick={() => toast.info('Facebook sign-in coming soon!')}
+                  className="bg-gray-700 hover:bg-gray-600 py-3 rounded-xl font-semibold transition-colors"
+                >
                   Facebook
                 </button>
               </div>
