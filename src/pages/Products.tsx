@@ -385,9 +385,60 @@ export default function Products() {
             {/* Products Grid/List */}
             <div className="lg:col-span-3">
               {paginatedProducts.length === 0 ? (
-                <div className="text-center py-20">
-                  <p className="text-2xl text-gray-600 dark:text-gray-400">No products found</p>
-                  <p className="text-gray-500 dark:text-gray-500 mt-2">Try adjusting your filters</p>
+                <div className="text-center py-20 animate-fade-in">
+                  {/* Animated Icon */}
+                  <div className="relative inline-block mb-8">
+                    <div className="absolute inset-0 bg-gradient-to-r from-lime-500/20 to-orange-500/20 rounded-full blur-3xl animate-pulse"></div>
+                    <div className="relative bg-gray-100 dark:bg-gray-800 rounded-full p-8 transition-colors duration-300">
+                      <Search className="w-24 h-24 mx-auto text-gray-400 dark:text-gray-600 animate-bounce" strokeWidth={1.5} />
+                    </div>
+                  </div>
+
+                  {/* Title */}
+                  <h2 className="text-4xl md:text-5xl font-bold mb-4">
+                    No Products <span className="bg-gradient-to-r from-lime-500 to-orange-500 bg-clip-text text-transparent">Found</span>
+                  </h2>
+
+                  {/* Description */}
+                  <p className="text-xl text-gray-600 dark:text-gray-400 mb-8 max-w-md mx-auto">
+                    We couldn't find any products matching your criteria. Try adjusting your filters or search terms.
+                  </p>
+
+                  {/* Quick Actions */}
+                  <div className="flex flex-col sm:flex-row gap-4 justify-center items-center mb-12">
+                    <button
+                      onClick={() => {
+                        setSearchQuery('');
+                        setSelectedCategory('All');
+                        setPriceRange([0, 300]);
+                        setSortBy('featured');
+                        setCurrentPage(1);
+                      }}
+                      className="group inline-flex items-center gap-3 bg-gradient-to-r from-lime-500 to-orange-500 text-black px-8 py-4 rounded-full font-bold text-lg hover:shadow-2xl hover:shadow-lime-500/30 transition-all duration-300 transform hover:scale-105"
+                    >
+                      <X className="w-5 h-5 group-hover:rotate-90 transition-transform duration-300" />
+                      <span>Clear All Filters</span>
+                    </button>
+                  </div>
+
+                  {/* Suggestions */}
+                  <div className="max-w-2xl mx-auto">
+                    <p className="text-sm font-semibold text-gray-700 dark:text-gray-300 mb-4">Try browsing by category:</p>
+                    <div className="flex flex-wrap gap-3 justify-center">
+                      {categories.filter(cat => cat !== 'All').map((category) => (
+                        <button
+                          key={category}
+                          onClick={() => {
+                            setSelectedCategory(category);
+                            setCurrentPage(1);
+                          }}
+                          className="px-6 py-2 bg-gray-100 dark:bg-gray-800 hover:bg-lime-500 hover:text-black text-gray-700 dark:text-gray-300 rounded-full font-semibold transition-all duration-300 transform hover:scale-105"
+                        >
+                          {category}
+                        </button>
+                      ))}
+                    </div>
+                  </div>
                 </div>
               ) : (
                 <>
