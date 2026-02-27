@@ -41,45 +41,39 @@ export default function SignIn() {
 
             <form onSubmit={handleSubmit} className="space-y-6">
               {isSignUp && (
-                <div>
-                  <label className="block text-sm font-semibold mb-2">Full Name</label>
-                  <Input
-                    type="text"
-                    name="name"
-                    value={formData.name}
-                    onChange={(value) => handleChange('name', value)}
-                    placeholder="Enter your name"
-                    icon={<User className="w-5 h-5" />}
-                    required={isSignUp}
-                  />
-                </div>
+                <Input
+                  type="text"
+                  name="name"
+                  label="Full Name"
+                  value={formData.name}
+                  onChange={(value) => handleChange('name', value)}
+                  placeholder="Enter your name"
+                  icon={<User className="w-5 h-5" />}
+                  required={isSignUp}
+                />
               )}
 
-              <div>
-                <label className="block text-sm font-semibold mb-2">Email Address</label>
-                <Input
-                  type="email"
-                  name="email"
-                  value={formData.email}
-                  onChange={(value) => handleChange('email', value)}
-                  placeholder="Enter your email"
-                  icon={<Mail className="w-5 h-5" />}
-                  required
-                />
-              </div>
+              <Input
+                type="email"
+                name="email"
+                label="Email Address"
+                value={formData.email}
+                onChange={(value) => handleChange('email', value)}
+                placeholder="Enter your email"
+                icon={<Mail className="w-5 h-5" />}
+                required
+              />
 
-              <div>
-                <label className="block text-sm font-semibold mb-2">Password</label>
-                <Input
-                  type="password"
-                  name="password"
-                  value={formData.password}
-                  onChange={(value) => handleChange('password', value)}
-                  placeholder="Enter your password"
-                  icon={<Lock className="w-5 h-5" />}
-                  required
-                />
-              </div>
+              <Input
+                type="password"
+                name="password"
+                label="Password"
+                value={formData.password}
+                onChange={(value) => handleChange('password', value)}
+                placeholder="Enter your password"
+                icon={<Lock className="w-5 h-5" />}
+                required
+              />
 
               {!isSignUp && (
                 <div className="flex items-center justify-between">

@@ -410,8 +410,8 @@ export default function Products() {
 
                 {/* Sort By */}
                 <div>
-                  <h3 className="font-semibold mb-3 text-gray-300">Sort By</h3>
                   <Dropdown
+                    label="Sort By"
                     value={sortBy}
                     onChange={setSortBy}
                     options={[
