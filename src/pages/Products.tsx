@@ -80,7 +80,9 @@ export default function Products() {
     let filtered = allProducts.filter(product => {
       const matchesSearch = product.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
                            product.description.toLowerCase().includes(searchQuery.toLowerCase());
-      const matchesCategory = selectedCategory === 'All' || product.category === selectedCategory;
+      // Case-insensitive category matching
+      const matchesCategory = selectedCategory === 'All' || 
+                             product.category.toLowerCase() === selectedCategory.toLowerCase();
       const matchesPrice = product.price >= priceRange[0] && product.price <= priceRange[1];
       
       return matchesSearch && matchesCategory && matchesPrice;
@@ -104,7 +106,7 @@ export default function Products() {
     }
 
     return filtered;
-  }, [searchQuery, selectedCategory, priceRange, sortBy]);
+  }, [allProducts, searchQuery, selectedCategory, priceRange, sortBy]);
 
   const totalPages = Math.ceil(filteredAndSortedProducts.length / itemsPerPage);
   const paginatedProducts = filteredAndSortedProducts.slice(
@@ -324,23 +326,29 @@ export default function Products() {
                       <span>${priceRange[0]}</span>
                       <span>${priceRange[1]}</span>
                     </div>
-                    <input
-                      id="price-range-slider"
-                      name="priceRange"
-                      type="range"
-                      min="0"
-                      max="300"
-                      value={priceRange[1]}
-                      onChange={(e) => {
-                        setPriceRange([priceRange[0], parseInt(e.target.value)]);
-                        setCurrentPage(1);
-                      }}
-                      className="w-full accent-lime-500"
-                    />
+                    <div>
+                      <label htmlFor="price-range-slider" className="sr-only">
+                        Maximum Price
+                      </label>
+                      <input
+                        id="price-range-slider"
+                        name="priceRange"
+                        type="range"
+                        min="0"
+                        max="300"
+                        value={priceRange[1]}
+                        onChange={(e) => {
+                          setPriceRange([priceRange[0], parseInt(e.target.value)]);
+                          setCurrentPage(1);
+                        }}
+                        className="w-full accent-lime-500"
+                      />
+                    </div>
                     <div className="flex gap-2">
                       <Input
                         type="number"
                         name="minPrice"
+                        label="Min Price"
                         value={priceRange[0].toString()}
                         onChange={(value) => {
                           setPriceRange([parseInt(value) || 0, priceRange[1]]);
@@ -353,6 +361,7 @@ export default function Products() {
                       <Input
                         type="number"
                         name="maxPrice"
+                        label="Max Price"
                         value={priceRange[1].toString()}
                         onChange={(value) => {
                           setPriceRange([priceRange[0], parseInt(value) || 300]);

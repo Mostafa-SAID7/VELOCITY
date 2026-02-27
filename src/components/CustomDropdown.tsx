@@ -27,6 +27,9 @@ export default function CustomDropdown({
   const dropdownRef = useRef<HTMLDivElement>(null);
 
   const selectedOption = options.find(opt => opt.value === value);
+  
+  // Generate unique id for accessibility
+  const dropdownId = label ? `dropdown-${label.toLowerCase().replace(/\s+/g, '-')}` : undefined;
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
@@ -47,14 +50,34 @@ export default function CustomDropdown({
   return (
     <div className={className} ref={dropdownRef}>
       {label && (
-        <label className="block text-sm font-semibold mb-3 text-gray-700 dark:text-gray-300">{label}</label>
+        <label htmlFor={dropdownId} className="block text-sm font-semibold mb-3 text-gray-700 dark:text-gray-300">{label}</label>
       )}
       
       <div className="relative">
+        {/* Hidden select for form accessibility */}
+        <select
+          id={dropdownId}
+          name={dropdownId}
+          value={value}
+          onChange={(e) => onChange(e.target.value)}
+          className="sr-only"
+          aria-hidden="true"
+          tabIndex={-1}
+        >
+          {options.map((option) => (
+            <option key={option.value} value={option.value}>
+              {option.label}
+            </option>
+          ))}
+        </select>
+
         {/* Dropdown Button */}
         <button
           type="button"
           onClick={() => setIsOpen(!isOpen)}
+          aria-haspopup="listbox"
+          aria-expanded={isOpen}
+          aria-labelledby={dropdownId}
           className="w-full bg-white dark:bg-gray-800 text-gray-900 dark:text-white px-4 py-3 pr-10 rounded-lg border border-gray-300 dark:border-gray-700 focus:outline-none focus:ring-2 focus:ring-lime-500 focus:border-transparent transition-all cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-700 hover:border-gray-400 dark:hover:border-gray-600 shadow-sm text-left"
         >
           <span className={selectedOption ? 'text-gray-900 dark:text-white' : 'text-gray-400'}>

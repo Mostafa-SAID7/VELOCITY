@@ -1,6 +1,6 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { useParams, Link, useNavigate } from 'react-router-dom';
-import { ArrowLeft, Star, ShoppingBag, Heart, Share2, Check, Truck, Shield, RotateCcw } from 'lucide-react';
+import { ArrowLeft, Star, ShoppingBag, Heart, Share2, Check, Truck, Shield, RotateCcw, Facebook, Twitter, Linkedin, Mail, Link as LinkIcon, Copy } from 'lucide-react';
 import { getProducts, getSizes, Product } from '../services/api';
 import { useCart } from '../context/CartContext';
 import { useToast } from '../context/ToastContext';
@@ -16,9 +16,24 @@ export default function ProductDetails() {
   const [loading, setLoading] = useState(true);
   const [activeImage, setActiveImage] = useState(0);
   const [isFavorite, setIsFavorite] = useState(false);
+  const [showShareMenu, setShowShareMenu] = useState(false);
+  const [heartAnimation, setHeartAnimation] = useState(false);
+  const shareMenuRef = useRef<HTMLDivElement>(null);
 
   const { addToCart } = useCart();
   const toast = useToast();
+
+  // Close share menu when clicking outside
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (shareMenuRef.current && !shareMenuRef.current.contains(event.target as Node)) {
+        setShowShareMenu(false);
+      }
+    };
+
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, []);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -84,6 +99,51 @@ export default function ProductDetails() {
     } else {
       navigator.clipboard.writeText(window.location.href);
       toast.success('Link copied to clipboard!');
+    }
+  };
+
+  const handleFavoriteClick = () => {
+    setIsFavorite(!isFavorite);
+    setHeartAnimation(true);
+    setTimeout(() => setHeartAnimation(false), 600);
+    
+    if (!isFavorite) {
+      toast.success('Added to favorites!');
+    } else {
+      toast.info('Removed from favorites');
+    }
+  };
+
+  const handleShareOption = (platform: string) => {
+    const url = encodeURIComponent(window.location.href);
+    const title = encodeURIComponent(product?.name || '');
+    const description = encodeURIComponent(product?.description || '');
+
+    let shareUrl = '';
+
+    switch (platform) {
+      case 'facebook':
+        shareUrl = `https://www.facebook.com/sharer/sharer.php?u=${url}`;
+        break;
+      case 'twitter':
+        shareUrl = `https://twitter.com/intent/tweet?url=${url}&text=${title}`;
+        break;
+      case 'linkedin':
+        shareUrl = `https://www.linkedin.com/sharing/share-offsite/?url=${url}`;
+        break;
+      case 'email':
+        shareUrl = `mailto:?subject=${title}&body=${description}%0A%0A${url}`;
+        break;
+      case 'copy':
+        navigator.clipboard.writeText(window.location.href);
+        toast.success('Link copied to clipboard!');
+        setShowShareMenu(false);
+        return;
+    }
+
+    if (shareUrl) {
+      window.open(shareUrl, '_blank', 'width=600,height=400');
+      setShowShareMenu(false);
     }
   };
 
@@ -164,21 +224,89 @@ export default function ProductDetails() {
               </div>
               <div className="flex gap-2">
                 <button
-                  onClick={() => setIsFavorite(!isFavorite)}
-                  className={`p-3 rounded-full transition-all duration-300 ${
+                  onClick={handleFavoriteClick}
+                  className={`relative p-3 rounded-full transition-all duration-300 transform ${
                     isFavorite
-                      ? 'bg-red-500 text-white'
-                      : 'bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-400 hover:bg-gray-200 dark:hover:bg-gray-700'
-                  }`}
+                      ? 'bg-red-500 text-white scale-110'
+                      : 'bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-400 hover:bg-gray-200 dark:hover:bg-gray-700 hover:scale-105'
+                  } ${heartAnimation ? 'animate-bounce' : ''}`}
                 >
-                  <Heart className={`w-6 h-6 ${isFavorite ? 'fill-current' : ''}`} />
+                  <Heart className={`w-6 h-6 transition-all duration-300 ${isFavorite ? 'fill-current scale-110' : ''}`} />
+                  {isFavorite && (
+                    <span className="absolute -top-1 -right-1 w-3 h-3 bg-lime-500 rounded-full animate-ping"></span>
+                  )}
                 </button>
-                <button
-                  onClick={handleShare}
-                  className="p-3 rounded-full bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-400 hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors"
-                >
-                  <Share2 className="w-6 h-6" />
-                </button>
+                
+                <div className="relative" ref={shareMenuRef}>
+                  <button
+                    onClick={() => setShowShareMenu(!showShareMenu)}
+                    className="p-3 rounded-full bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-400 hover:bg-gray-200 dark:hover:bg-gray-700 transition-all duration-300 hover:scale-105"
+                  >
+                    <Share2 className="w-6 h-6" />
+                  </button>
+
+                  {/* Share Dropdown Menu */}
+                  {showShareMenu && (
+                    <div className="absolute right-0 mt-2 w-64 bg-white dark:bg-gray-800 rounded-2xl shadow-2xl border border-gray-200 dark:border-gray-700 overflow-hidden z-50 animate-slide-down">
+                      <div className="p-4 border-b border-gray-200 dark:border-gray-700">
+                        <h3 className="font-bold text-sm">Share this product</h3>
+                      </div>
+                      <div className="p-2">
+                        <button
+                          onClick={() => handleShareOption('facebook')}
+                          className="w-full flex items-center gap-3 px-4 py-3 rounded-xl hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors text-left"
+                        >
+                          <div className="w-10 h-10 bg-blue-600 rounded-full flex items-center justify-center">
+                            <Facebook className="w-5 h-5 text-white fill-current" />
+                          </div>
+                          <span className="font-semibold">Facebook</span>
+                        </button>
+                        
+                        <button
+                          onClick={() => handleShareOption('twitter')}
+                          className="w-full flex items-center gap-3 px-4 py-3 rounded-xl hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors text-left"
+                        >
+                          <div className="w-10 h-10 bg-sky-500 rounded-full flex items-center justify-center">
+                            <Twitter className="w-5 h-5 text-white fill-current" />
+                          </div>
+                          <span className="font-semibold">Twitter</span>
+                        </button>
+                        
+                        <button
+                          onClick={() => handleShareOption('linkedin')}
+                          className="w-full flex items-center gap-3 px-4 py-3 rounded-xl hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors text-left"
+                        >
+                          <div className="w-10 h-10 bg-blue-700 rounded-full flex items-center justify-center">
+                            <Linkedin className="w-5 h-5 text-white fill-current" />
+                          </div>
+                          <span className="font-semibold">LinkedIn</span>
+                        </button>
+                        
+                        <button
+                          onClick={() => handleShareOption('email')}
+                          className="w-full flex items-center gap-3 px-4 py-3 rounded-xl hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors text-left"
+                        >
+                          <div className="w-10 h-10 bg-gray-600 rounded-full flex items-center justify-center">
+                            <Mail className="w-5 h-5 text-white" />
+                          </div>
+                          <span className="font-semibold">Email</span>
+                        </button>
+                        
+                        <div className="border-t border-gray-200 dark:border-gray-700 my-2"></div>
+                        
+                        <button
+                          onClick={() => handleShareOption('copy')}
+                          className="w-full flex items-center gap-3 px-4 py-3 rounded-xl hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors text-left"
+                        >
+                          <div className="w-10 h-10 bg-lime-500 rounded-full flex items-center justify-center">
+                            <Copy className="w-5 h-5 text-black" />
+                          </div>
+                          <span className="font-semibold">Copy Link</span>
+                        </button>
+                      </div>
+                    </div>
+                  )}
+                </div>
               </div>
             </div>
 

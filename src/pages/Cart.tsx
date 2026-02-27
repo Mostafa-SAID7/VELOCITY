@@ -1,11 +1,14 @@
-import { Trash2, Plus, Minus, ShoppingBag } from 'lucide-react';
-import { Link } from 'react-router-dom';
+import { useState } from 'react';
+import { Trash2, Plus, Minus, ShoppingBag, CreditCard } from 'lucide-react';
+import { Link, useNavigate } from 'react-router-dom';
 import { useCart } from '../context/CartContext';
 import { useToast } from '../context/ToastContext';
 
 export default function Cart() {
   const { cartItems, removeFromCart, updateQuantity } = useCart();
   const toast = useToast();
+  const navigate = useNavigate();
+  const [loading, setLoading] = useState(false);
 
   const handleRemoveItem = (id: number, name: string) => {
     removeFromCart(id);
@@ -27,6 +30,33 @@ export default function Cart() {
   const shipping = cartItems.length > 0 ? 15 : 0;
   const tax = subtotal * 0.08;
   const total = subtotal + shipping + tax;
+
+  const handleCheckout = async () => {
+    setLoading(true);
+    
+    try {
+      // Simulate payment processing
+      toast.info('Processing your order...');
+      
+      // Simulate API delay
+      await new Promise(resolve => setTimeout(resolve, 2000));
+      
+      // Simulate successful payment
+      toast.success('Payment successful! Redirecting...');
+      
+      // Wait a bit before redirect
+      await new Promise(resolve => setTimeout(resolve, 1000));
+      
+      // Redirect to success page
+      navigate('/success');
+      
+    } catch (error) {
+      console.error('Checkout error:', error);
+      toast.error('Failed to process payment. Please try again.');
+    } finally {
+      setLoading(false);
+    }
+  };
 
   if (cartItems.length === 0) {
     return (
@@ -160,10 +190,21 @@ export default function Cart() {
                 </div>
 
                 <button 
-                  onClick={() => toast.info('Checkout feature coming soon!')}
-                  className="w-full bg-gradient-to-r from-lime-500 to-orange-500 text-black py-4 rounded-full font-bold hover:shadow-lg hover:shadow-lime-500/25 transition-all duration-300 mb-4"
+                  onClick={handleCheckout}
+                  disabled={loading}
+                  className="w-full bg-gradient-to-r from-lime-500 to-orange-500 text-black py-4 rounded-full font-bold hover:shadow-lg hover:shadow-lime-500/25 transition-all duration-300 mb-4 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
                 >
-                  Proceed to Checkout
+                  {loading ? (
+                    <>
+                      <div className="animate-spin rounded-full h-5 w-5 border-t-2 border-b-2 border-black"></div>
+                      <span>Processing...</span>
+                    </>
+                  ) : (
+                    <>
+                      <CreditCard className="w-5 h-5" />
+                      <span>Proceed to Checkout</span>
+                    </>
+                  )}
                 </button>
 
                 <Link 

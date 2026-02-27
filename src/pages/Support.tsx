@@ -244,35 +244,59 @@ export default function Support() {
                 <h2 className="text-2xl font-bold mb-6">Send us a Message</h2>
                 <form className="space-y-4">
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div>
+                      <label htmlFor="contact-name" className="block text-sm font-semibold mb-2 text-gray-700 dark:text-gray-300">
+                        Name
+                      </label>
+                      <input
+                        id="contact-name"
+                        name="name"
+                        type="text"
+                        placeholder="Your Name"
+                        autoComplete="name"
+                        className="w-full px-4 py-3 rounded-xl bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 focus:outline-none focus:ring-2 focus:ring-lime-500 transition-colors text-gray-900 dark:text-white"
+                      />
+                    </div>
+                    <div>
+                      <label htmlFor="contact-email" className="block text-sm font-semibold mb-2 text-gray-700 dark:text-gray-300">
+                        Email
+                      </label>
+                      <input
+                        id="contact-email"
+                        name="email"
+                        type="email"
+                        placeholder="Your Email"
+                        autoComplete="email"
+                        className="w-full px-4 py-3 rounded-xl bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 focus:outline-none focus:ring-2 focus:ring-lime-500 transition-colors text-gray-900 dark:text-white"
+                      />
+                    </div>
+                  </div>
+                  <div>
+                    <label htmlFor="contact-subject" className="block text-sm font-semibold mb-2 text-gray-700 dark:text-gray-300">
+                      Subject
+                    </label>
                     <input
-                      id="contact-name"
-                      name="name"
+                      id="contact-subject"
+                      name="subject"
                       type="text"
-                      placeholder="Your Name"
-                      className="w-full px-4 py-3 rounded-xl bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 focus:outline-none focus:ring-2 focus:ring-lime-500 transition-colors"
-                    />
-                    <input
-                      id="contact-email"
-                      name="email"
-                      type="email"
-                      placeholder="Your Email"
-                      className="w-full px-4 py-3 rounded-xl bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 focus:outline-none focus:ring-2 focus:ring-lime-500 transition-colors"
+                      placeholder="Subject"
+                      autoComplete="off"
+                      className="w-full px-4 py-3 rounded-xl bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 focus:outline-none focus:ring-2 focus:ring-lime-500 transition-colors text-gray-900 dark:text-white"
                     />
                   </div>
-                  <input
-                    id="contact-subject"
-                    name="subject"
-                    type="text"
-                    placeholder="Subject"
-                    className="w-full px-4 py-3 rounded-xl bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 focus:outline-none focus:ring-2 focus:ring-lime-500 transition-colors"
-                  />
-                  <textarea
-                    id="contact-message"
-                    name="message"
-                    rows={6}
-                    placeholder="Your Message"
-                    className="w-full px-4 py-3 rounded-xl bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 focus:outline-none focus:ring-2 focus:ring-lime-500 transition-colors"
-                  ></textarea>
+                  <div>
+                    <label htmlFor="contact-message" className="block text-sm font-semibold mb-2 text-gray-700 dark:text-gray-300">
+                      Message
+                    </label>
+                    <textarea
+                      id="contact-message"
+                      name="message"
+                      rows={6}
+                      placeholder="Your Message"
+                      autoComplete="off"
+                      className="w-full px-4 py-3 rounded-xl bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 focus:outline-none focus:ring-2 focus:ring-lime-500 transition-colors text-gray-900 dark:text-white"
+                    ></textarea>
+                  </div>
                   <button
                     type="submit"
                     className="bg-gradient-to-r from-lime-500 to-orange-500 text-black px-8 py-4 rounded-full font-bold hover:shadow-lg hover:shadow-lime-500/25 transition-all duration-300 transform hover:scale-105"

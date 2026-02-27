@@ -95,6 +95,7 @@ export default function SignIn() {
                   placeholder="Enter your name"
                   icon={<User className="w-5 h-5" />}
                   required={isSignUp}
+                  autocomplete="name"
                 />
               )}
 
@@ -107,6 +108,7 @@ export default function SignIn() {
                 placeholder="Enter your email"
                 icon={<Mail className="w-5 h-5" />}
                 required
+                autocomplete="email"
               />
 
               <Input
@@ -118,15 +120,17 @@ export default function SignIn() {
                 placeholder="Enter your password"
                 icon={<Lock className="w-5 h-5" />}
                 required
+                autocomplete={isSignUp ? "new-password" : "current-password"}
               />
 
               {!isSignUp && (
                 <div className="flex items-center justify-between">
-                  <label className="flex items-center">
+                  <label htmlFor="remember-me" className="flex items-center cursor-pointer">
                     <input 
                       id="remember-me"
                       name="rememberMe"
-                      type="checkbox" 
+                      type="checkbox"
+                      autoComplete="off"
                       className="mr-2" 
                     />
                     <span className="text-sm text-gray-600 dark:text-gray-400">Remember me</span>

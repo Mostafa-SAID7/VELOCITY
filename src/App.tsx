@@ -12,6 +12,7 @@ import Story from './pages/Story';
 import Reviews from './pages/Reviews';
 import Cart from './pages/Cart';
 import SignIn from './pages/SignIn';
+import Success from './pages/Success';
 import NotFound from './pages/NotFound';
 import Support from './pages/Support';
 import Privacy from './pages/Privacy';
@@ -34,6 +35,7 @@ function App() {
                   <Route path="/reviews" element={<Reviews />} />
                   <Route path="/cart" element={<Cart />} />
                   <Route path="/signin" element={<SignIn />} />
+                  <Route path="/success" element={<Success />} />
                   <Route path="/support" element={<Support />} />
                   <Route path="/support/:page" element={<Support />} />
                   <Route path="/privacy" element={<Privacy />} />

@@ -317,15 +317,21 @@ export default function Home() {
               Get exclusive access to new releases, training tips, and special offers
             </p>
             <form onSubmit={handleSubscribe} className="max-w-md mx-auto flex gap-4">
-              <input 
-                id="newsletter-email"
-                name="email"
-                type="email" 
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                placeholder="Enter your email"
-                className="flex-1 px-6 py-4 rounded-full text-black placeholder-gray-600 bg-white/90 backdrop-blur-sm border-0 focus:outline-none focus:ring-4 focus:ring-white/50"
-              />
+              <div className="flex-1">
+                <label htmlFor="newsletter-email" className="sr-only">
+                  Email Address
+                </label>
+                <input 
+                  id="newsletter-email"
+                  name="email"
+                  type="email" 
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  placeholder="Enter your email"
+                  autoComplete="email"
+                  className="w-full px-6 py-4 rounded-full text-black placeholder-gray-600 bg-white/90 backdrop-blur-sm border-0 focus:outline-none focus:ring-4 focus:ring-white/50"
+                />
+              </div>
               <button 
                 type="submit"
                 className="bg-black text-white px-8 py-4 rounded-full font-bold hover:bg-gray-800 transition-colors duration-300"

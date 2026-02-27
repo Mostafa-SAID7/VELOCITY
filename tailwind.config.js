@@ -73,7 +73,8 @@ export default {
     },
   },
   plugins: [
-    function ({ addUtilities }) {
+    function ({ addUtilities, addComponents, theme }) {
+      // Scrollbar utilities
       const newUtilities = {
         '.scrollbar-thin': {
           '&::-webkit-scrollbar': {
@@ -145,6 +146,22 @@ export default {
         },
       };
       addUtilities(newUtilities, ['responsive', 'hover']);
+
+      // Number input components
+      const numberInputComponents = {
+        '.number-input-styled': {
+          position: 'relative',
+        },
+        '.number-input-styled input[type="number"]': {
+          paddingRight: '8px !important',
+        },
+        '.number-input-styled input[type="number"]::-webkit-inner-spin-button, .number-input-styled input[type="number"]::-webkit-outer-spin-button': {
+          '-webkit-appearance': 'inner-spin-button',
+          opacity: '1',
+          cursor: 'pointer',
+        },
+      };
+      addComponents(numberInputComponents);
     },
   ],
 };
