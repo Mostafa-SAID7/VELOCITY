@@ -1,6 +1,8 @@
 import { useState, useMemo } from 'react';
 import { Search, SlidersHorizontal, Grid, List, ChevronLeft, ChevronRight, X, Check } from 'lucide-react';
 import { useCart } from '../context/CartContext';
+import Dropdown from '../components/Dropdown';
+import Input from '../components/Input';
 
 interface Product {
   id: number;
@@ -291,17 +293,16 @@ export default function Products() {
 
           {/* Search and View Toggle */}
           <div className="flex flex-col md:flex-row gap-4 mb-8">
-            <div className="flex-1 relative">
-              <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400" />
-              <input
+            <div className="flex-1">
+              <Input
                 type="text"
-                placeholder="Search products..."
                 value={searchQuery}
-                onChange={(e) => {
-                  setSearchQuery(e.target.value);
+                onChange={(value) => {
+                  setSearchQuery(value);
                   setCurrentPage(1);
                 }}
-                className="w-full bg-gray-700 text-white pl-12 pr-4 py-3 rounded-xl focus:outline-none focus:ring-2 focus:ring-lime-500 transition-all"
+                placeholder="Search products..."
+                icon={<Search className="w-5 h-5" />}
               />
             </div>
             
@@ -381,25 +382,27 @@ export default function Products() {
                       className="w-full accent-lime-500"
                     />
                     <div className="flex gap-2">
-                      <input
+                      <Input
                         type="number"
-                        value={priceRange[0]}
-                        onChange={(e) => {
-                          setPriceRange([parseInt(e.target.value) || 0, priceRange[1]]);
+                        value={priceRange[0].toString()}
+                        onChange={(value) => {
+                          setPriceRange([parseInt(value) || 0, priceRange[1]]);
                           setCurrentPage(1);
                         }}
-                        className="w-full bg-gray-800 px-3 py-2 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-lime-500"
                         placeholder="Min"
+                        min="0"
+                        max="300"
                       />
-                      <input
+                      <Input
                         type="number"
-                        value={priceRange[1]}
-                        onChange={(e) => {
-                          setPriceRange([priceRange[0], parseInt(e.target.value) || 300]);
+                        value={priceRange[1].toString()}
+                        onChange={(value) => {
+                          setPriceRange([priceRange[0], parseInt(value) || 300]);
                           setCurrentPage(1);
                         }}
-                        className="w-full bg-gray-800 px-3 py-2 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-lime-500"
                         placeholder="Max"
+                        min="0"
+                        max="300"
                       />
                     </div>
                   </div>
@@ -408,17 +411,17 @@ export default function Products() {
                 {/* Sort By */}
                 <div>
                   <h3 className="font-semibold mb-3 text-gray-300">Sort By</h3>
-                  <select
+                  <Dropdown
                     value={sortBy}
-                    onChange={(e) => setSortBy(e.target.value)}
-                    className="w-full bg-gray-800 text-white px-4 py-2 rounded-lg focus:outline-none focus:ring-2 focus:ring-lime-500"
-                  >
-                    <option value="featured">Featured</option>
-                    <option value="price-low">Price: Low to High</option>
-                    <option value="price-high">Price: High to Low</option>
-                    <option value="rating">Highest Rated</option>
-                    <option value="name">Name: A to Z</option>
-                  </select>
+                    onChange={setSortBy}
+                    options={[
+                      { value: 'featured', label: 'Featured' },
+                      { value: 'price-low', label: 'Price: Low to High' },
+                      { value: 'price-high', label: 'Price: High to Low' },
+                      { value: 'rating', label: 'Highest Rated' },
+                      { value: 'name', label: 'Name: A to Z' }
+                    ]}
+                  />
                 </div>
 
                 {/* Reset Filters */}

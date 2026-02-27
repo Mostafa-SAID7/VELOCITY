@@ -1,6 +1,7 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Mail, Lock, User } from 'lucide-react';
+import Input from '../components/Input';
 
 export default function SignIn() {
   const [isSignUp, setIsSignUp] = useState(false);
@@ -15,10 +16,10 @@ export default function SignIn() {
     console.log('Form submitted:', formData);
   };
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleChange = (field: string, value: string) => {
     setFormData({
       ...formData,
-      [e.target.name]: e.target.value
+      [field]: value
     });
   };
 
@@ -42,51 +43,42 @@ export default function SignIn() {
               {isSignUp && (
                 <div>
                   <label className="block text-sm font-semibold mb-2">Full Name</label>
-                  <div className="relative">
-                    <User className="absolute left-4 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400" />
-                    <input
-                      type="text"
-                      name="name"
-                      value={formData.name}
-                      onChange={handleChange}
-                      placeholder="Enter your name"
-                      className="w-full bg-gray-700 text-white pl-12 pr-4 py-3 rounded-xl focus:outline-none focus:ring-2 focus:ring-lime-500 transition-all"
-                      required={isSignUp}
-                    />
-                  </div>
+                  <Input
+                    type="text"
+                    name="name"
+                    value={formData.name}
+                    onChange={(value) => handleChange('name', value)}
+                    placeholder="Enter your name"
+                    icon={<User className="w-5 h-5" />}
+                    required={isSignUp}
+                  />
                 </div>
               )}
 
               <div>
                 <label className="block text-sm font-semibold mb-2">Email Address</label>
-                <div className="relative">
-                  <Mail className="absolute left-4 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400" />
-                  <input
-                    type="email"
-                    name="email"
-                    value={formData.email}
-                    onChange={handleChange}
-                    placeholder="Enter your email"
-                    className="w-full bg-gray-700 text-white pl-12 pr-4 py-3 rounded-xl focus:outline-none focus:ring-2 focus:ring-lime-500 transition-all"
-                    required
-                  />
-                </div>
+                <Input
+                  type="email"
+                  name="email"
+                  value={formData.email}
+                  onChange={(value) => handleChange('email', value)}
+                  placeholder="Enter your email"
+                  icon={<Mail className="w-5 h-5" />}
+                  required
+                />
               </div>
 
               <div>
                 <label className="block text-sm font-semibold mb-2">Password</label>
-                <div className="relative">
-                  <Lock className="absolute left-4 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400" />
-                  <input
-                    type="password"
-                    name="password"
-                    value={formData.password}
-                    onChange={handleChange}
-                    placeholder="Enter your password"
-                    className="w-full bg-gray-700 text-white pl-12 pr-4 py-3 rounded-xl focus:outline-none focus:ring-2 focus:ring-lime-500 transition-all"
-                    required
-                  />
-                </div>
+                <Input
+                  type="password"
+                  name="password"
+                  value={formData.password}
+                  onChange={(value) => handleChange('password', value)}
+                  placeholder="Enter your password"
+                  icon={<Lock className="w-5 h-5" />}
+                  required
+                />
               </div>
 
               {!isSignUp && (
