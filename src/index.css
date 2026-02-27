@@ -24,12 +24,25 @@
   }
 }
 
+@keyframes shimmer {
+  0% {
+    background-position: -200% 0;
+  }
+  100% {
+    background-position: 200% 0;
+  }
+}
+
 .animate-slide-in {
   animation: slide-in 0.3s ease-out;
 }
 
 .animate-slide-down {
   animation: slide-down 0.2s ease-out;
+}
+
+.animate-pulse {
+  animation: shimmer 2s infinite linear;
 }
 
 /* Custom Scrollbar */

@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { Star, ChevronLeft, ChevronRight } from 'lucide-react';
 import { getTestimonials, Testimonial } from '../services/api';
+import { TestimonialSkeleton } from '../components/Skeleton';
 
 export default function Reviews() {
   const [currentTestimonial, setCurrentTestimonial] = useState(0);
@@ -39,11 +40,38 @@ export default function Reviews() {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-gray-900 text-white pt-20 flex items-center justify-center">
-        <div className="text-center">
-          <div className="animate-spin rounded-full h-16 w-16 border-t-2 border-b-2 border-lime-500 mx-auto mb-4"></div>
-          <p className="text-xl text-gray-400">Loading reviews...</p>
-        </div>
+      <div className="min-h-screen bg-gray-900 text-white pt-20">
+        <section className="py-20 bg-gray-800">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="text-center mb-16">
+              <h1 className="text-4xl md:text-5xl font-bold mb-4">
+                What Champions <span className="bg-gradient-to-r from-lime-500 to-orange-500 bg-clip-text text-transparent">Say</span>
+              </h1>
+              <p className="text-xl text-gray-400">Loading reviews...</p>
+            </div>
+
+            <div className="relative max-w-4xl mx-auto mb-20">
+              <TestimonialSkeleton />
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+              {[1, 2, 3].map((i) => (
+                <div key={i} className="bg-gray-900/50 backdrop-blur-sm rounded-2xl p-6 shadow-xl">
+                  <div className="flex items-center mb-4">
+                    <div className="w-12 h-12 rounded-full bg-gray-700 animate-pulse mr-4"></div>
+                    <div className="flex-1">
+                      <div className="h-4 w-24 bg-gray-700 rounded mb-2 animate-pulse"></div>
+                      <div className="h-3 w-20 bg-gray-700 rounded animate-pulse"></div>
+                    </div>
+                  </div>
+                  <div className="h-3 w-20 bg-gray-700 rounded mb-3 animate-pulse"></div>
+                  <div className="h-3 w-full bg-gray-700 rounded mb-2 animate-pulse"></div>
+                  <div className="h-3 w-5/6 bg-gray-700 rounded animate-pulse"></div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </section>
       </div>
     );
   }

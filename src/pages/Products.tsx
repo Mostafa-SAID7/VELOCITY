@@ -4,6 +4,7 @@ import { useCart } from '../context/CartContext';
 import { useToast } from '../context/ToastContext';
 import CustomDropdown from '../components/CustomDropdown';
 import Input from '../components/Input';
+import { ProductCardSkeleton } from '../components/Skeleton';
 import { getProducts, getCategories, getSizes, Product as ProductType } from '../services/api';
 
 export default function Products() {
@@ -118,11 +119,40 @@ export default function Products() {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-gray-900 text-white pt-20 flex items-center justify-center">
-        <div className="text-center">
-          <div className="animate-spin rounded-full h-16 w-16 border-t-2 border-b-2 border-lime-500 mx-auto mb-4"></div>
-          <p className="text-xl text-gray-400">Loading products...</p>
-        </div>
+      <div className="min-h-screen bg-gray-900 text-white pt-20">
+        <section className="py-12 bg-gray-800">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="text-center mb-8">
+              <h1 className="text-4xl md:text-5xl font-bold mb-4">
+                Our <span className="bg-gradient-to-r from-lime-500 to-orange-500 bg-clip-text text-transparent">Products</span>
+              </h1>
+              <p className="text-xl text-gray-400">Loading products...</p>
+            </div>
+
+            <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
+              {/* Skeleton Sidebar */}
+              <div className="lg:col-span-1">
+                <div className="bg-gray-700/50 rounded-2xl p-6 sticky top-24">
+                  <div className="h-6 w-32 bg-gray-700 rounded mb-6 animate-pulse"></div>
+                  <div className="space-y-4">
+                    {[1, 2, 3, 4, 5].map((i) => (
+                      <div key={i} className="h-10 bg-gray-700 rounded-lg animate-pulse"></div>
+                    ))}
+                  </div>
+                </div>
+              </div>
+
+              {/* Skeleton Products */}
+              <div className="lg:col-span-3">
+                <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
+                  {[1, 2, 3, 4, 5, 6].map((i) => (
+                    <ProductCardSkeleton key={i} />
+                  ))}
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
       </div>
     );
   }

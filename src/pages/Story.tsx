@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { Award, Users, Zap, Target, Heart, TrendingUp } from 'lucide-react';
 import { getStats, Stats } from '../services/api';
+import { StatsCardSkeleton } from '../components/Skeleton';
 
 export default function Story() {
   const [stats, setStats] = useState<Stats | null>(null);
@@ -23,11 +24,35 @@ export default function Story() {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-gray-900 text-white pt-20 flex items-center justify-center">
-        <div className="text-center">
-          <div className="animate-spin rounded-full h-16 w-16 border-t-2 border-b-2 border-lime-500 mx-auto mb-4"></div>
-          <p className="text-xl text-gray-400">Loading...</p>
-        </div>
+      <div className="min-h-screen bg-gray-900 text-white pt-20">
+        <section className="py-20 bg-gray-800">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="text-center mb-16">
+              <h1 className="text-4xl md:text-5xl font-bold mb-4">
+                Our <span className="bg-gradient-to-r from-lime-500 to-orange-500 bg-clip-text text-transparent">Story</span>
+              </h1>
+              <p className="text-xl text-gray-400">Loading...</p>
+            </div>
+
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center mb-20">
+              <div>
+                <div className="h-10 w-64 bg-gray-700 rounded mb-6 animate-pulse"></div>
+                <div className="space-y-4">
+                  <div className="h-4 w-full bg-gray-700 rounded animate-pulse"></div>
+                  <div className="h-4 w-full bg-gray-700 rounded animate-pulse"></div>
+                  <div className="h-4 w-5/6 bg-gray-700 rounded animate-pulse"></div>
+                </div>
+              </div>
+              <div className="aspect-square rounded-2xl bg-gray-700 animate-pulse"></div>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+              {[1, 2, 3].map((i) => (
+                <StatsCardSkeleton key={i} />
+              ))}
+            </div>
+          </div>
+        </section>
       </div>
     );
   }
