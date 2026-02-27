@@ -33,7 +33,7 @@ export default function Products() {
 
   // Update category when URL parameter changes
   useEffect(() => {
-    if (categoryParam) {
+    if (categoryParam && categories.length > 0) {
       // Check if the category exists in the categories list
       const matchingCategory = categories.find(cat => 
         cat.toLowerCase() === categoryParam.toLowerCase()
@@ -73,6 +73,10 @@ export default function Products() {
   }, []); // Only run once on mount
 
   const filteredAndSortedProducts = useMemo(() => {
+    if (!allProducts || allProducts.length === 0) {
+      return [];
+    }
+
     let filtered = allProducts.filter(product => {
       const matchesSearch = product.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
                            product.description.toLowerCase().includes(searchQuery.toLowerCase());
