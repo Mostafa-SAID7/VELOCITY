@@ -56,8 +56,9 @@ export default function Products() {
         ]);
         
         setAllProducts(productsData);
-        // Categories already include "All" from API, no need to add it again
-        setCategories(categoriesData.map(cat => cat.name));
+        // Categories already include "All" from API, ensure no duplicates
+        const uniqueCategories = Array.from(new Set(categoriesData.map(cat => cat.name)));
+        setCategories(uniqueCategories);
         setSizes(sizesData);
       } catch (error) {
         console.error('Error fetching data:', error);
@@ -291,9 +292,9 @@ export default function Products() {
                 <div className="mb-6">
                   <h3 className="font-semibold mb-3 text-gray-700 dark:text-gray-300">Category</h3>
                   <div className="space-y-2">
-                    {categories.map((category) => (
+                    {categories.map((category, index) => (
                       <button
-                        key={category}
+                        key={`category-${index}-${category}`}
                         onClick={() => {
                           setSelectedCategory(category);
                           setCurrentPage(1);
@@ -431,9 +432,9 @@ export default function Products() {
                   <div className="max-w-2xl mx-auto">
                     <p className="text-sm font-semibold text-gray-700 dark:text-gray-300 mb-4">Try browsing by category:</p>
                     <div className="flex flex-wrap gap-3 justify-center">
-                      {categories.filter(cat => cat !== 'All').map((category) => (
+                      {categories.filter(cat => cat !== 'All').map((category, index) => (
                         <button
-                          key={category}
+                          key={`empty-category-${index}-${category}`}
                           onClick={() => {
                             setSelectedCategory(category);
                             setCurrentPage(1);
