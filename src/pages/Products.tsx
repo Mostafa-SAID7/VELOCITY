@@ -1,5 +1,5 @@
 import { useState, useMemo, useEffect } from 'react';
-import { useSearchParams } from 'react-router-dom';
+import { useSearchParams, Link } from 'react-router-dom';
 import { Search, SlidersHorizontal, Grid, List, ChevronLeft, ChevronRight, X } from 'lucide-react';
 import { useCart } from '../context/CartContext';
 import { useToast } from '../context/ToastContext';
@@ -33,8 +33,14 @@ export default function Products() {
 
   // Update category when URL parameter changes
   useEffect(() => {
-    if (categoryParam && categories.includes(categoryParam)) {
-      setSelectedCategory(categoryParam);
+    if (categoryParam) {
+      // Check if the category exists in the categories list
+      const matchingCategory = categories.find(cat => 
+        cat.toLowerCase() === categoryParam.toLowerCase()
+      );
+      if (matchingCategory) {
+        setSelectedCategory(matchingCategory);
+      }
     }
   }, [categoryParam, categories]);
 
@@ -449,7 +455,7 @@ export default function Products() {
                   }>
                     {paginatedProducts.map((product) => (
                       viewMode === 'grid' ? (
-                        <div key={product.id} className="group bg-white dark:bg-gray-800/50 backdrop-blur-sm rounded-2xl overflow-hidden shadow-xl hover:shadow-lime-500/10 transition-all duration-500 transform hover:-translate-y-2">
+                        <Link key={product.id} to={`/products/${product.id}`} className="group bg-white dark:bg-gray-800/50 backdrop-blur-sm rounded-2xl overflow-hidden shadow-xl hover:shadow-lime-500/10 transition-all duration-500 transform hover:-translate-y-2">
                           <div className="aspect-square overflow-hidden">
                             <img 
                               src={product.image} 
@@ -472,16 +478,19 @@ export default function Products() {
                             <div className="flex justify-between items-center">
                               <span className="text-2xl font-bold text-orange-500">${product.price}</span>
                               <button 
-                                onClick={() => handleAddToCart(product)}
+                                onClick={(e) => {
+                                  e.preventDefault();
+                                  handleAddToCart(product);
+                                }}
                                 className="bg-gradient-to-r from-lime-500 to-orange-500 text-black px-4 py-2 rounded-full font-semibold hover:shadow-lg transition-all duration-300 transform hover:scale-105"
                               >
                                 Add to Cart
                               </button>
                             </div>
                           </div>
-                        </div>
+                        </Link>
                       ) : (
-                        <div key={product.id} className="group bg-white dark:bg-gray-800/50 backdrop-blur-sm rounded-2xl overflow-hidden shadow-xl hover:shadow-lime-500/10 transition-all duration-300 flex">
+                        <Link key={product.id} to={`/products/${product.id}`} className="group bg-white dark:bg-gray-800/50 backdrop-blur-sm rounded-2xl overflow-hidden shadow-xl hover:shadow-lime-500/10 transition-all duration-300 flex">
                           <div className="w-48 h-48 flex-shrink-0 overflow-hidden">
                             <img 
                               src={product.image} 
@@ -506,14 +515,17 @@ export default function Products() {
                             <div className="flex justify-between items-center mt-4">
                               <span className="text-3xl font-bold text-orange-500">${product.price}</span>
                               <button 
-                                onClick={() => handleAddToCart(product)}
+                                onClick={(e) => {
+                                  e.preventDefault();
+                                  handleAddToCart(product);
+                                }}
                                 className="bg-gradient-to-r from-lime-500 to-orange-500 text-black px-6 py-3 rounded-full font-semibold hover:shadow-lg transition-all duration-300 transform hover:scale-105"
                               >
                                 Add to Cart
                               </button>
                             </div>
                           </div>
-                        </div>
+                        </Link>
                       )
                     ))}
                   </div>
