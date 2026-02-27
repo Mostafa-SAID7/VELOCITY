@@ -119,24 +119,24 @@ export default function Products() {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-gray-900 text-white pt-20">
-        <section className="py-12 bg-gray-800">
+      <div className="min-h-screen bg-white dark:bg-gray-900 text-gray-900 dark:text-white pt-20 transition-colors duration-300">
+        <section className="py-12 bg-gray-100 dark:bg-gray-800 transition-colors duration-300">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="text-center mb-8">
               <h1 className="text-4xl md:text-5xl font-bold mb-4">
                 Our <span className="bg-gradient-to-r from-lime-500 to-orange-500 bg-clip-text text-transparent">Products</span>
               </h1>
-              <p className="text-xl text-gray-400">Loading products...</p>
+              <p className="text-xl text-gray-600 dark:text-gray-400">Loading products...</p>
             </div>
 
             <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
               {/* Skeleton Sidebar */}
               <div className="lg:col-span-1">
-                <div className="bg-gray-700/50 rounded-2xl p-6 sticky top-24">
-                  <div className="h-6 w-32 bg-gray-700 rounded mb-6 animate-pulse"></div>
+                <div className="bg-gray-200 dark:bg-gray-700/50 rounded-2xl p-6 sticky top-24 transition-colors duration-300">
+                  <div className="h-6 w-32 bg-gray-300 dark:bg-gray-700 rounded mb-6 animate-pulse"></div>
                   <div className="space-y-4">
                     {[1, 2, 3, 4, 5].map((i) => (
-                      <div key={i} className="h-10 bg-gray-700 rounded-lg animate-pulse"></div>
+                      <div key={i} className="h-10 bg-gray-300 dark:bg-gray-700 rounded-lg animate-pulse"></div>
                     ))}
                   </div>
                 </div>
@@ -158,14 +158,14 @@ export default function Products() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-900 text-white pt-20">
+    <div className="min-h-screen bg-white dark:bg-gray-900 text-gray-900 dark:text-white pt-20 transition-colors duration-300">
       {/* Size Selection Modal */}
       {selectedProduct && (
         <div className="fixed inset-0 bg-black/70 backdrop-blur-sm z-50 flex items-center justify-center p-4">
-          <div className="bg-gray-800 rounded-2xl max-w-md w-full p-6 relative">
+          <div className="bg-white dark:bg-gray-800 rounded-2xl max-w-md w-full p-6 relative transition-colors duration-300">
             <button
               onClick={() => setSelectedProduct(null)}
-              className="absolute top-4 right-4 p-2 hover:bg-gray-700 rounded-full transition-colors"
+              className="absolute top-4 right-4 p-2 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-full transition-colors"
             >
               <X className="w-5 h-5" />
             </button>
@@ -210,13 +210,13 @@ export default function Products() {
         </div>
       )}
 
-      <section className="py-12 bg-gray-800">
+      <section className="py-12 bg-gray-100 dark:bg-gray-800 transition-colors duration-300">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-8">
             <h1 className="text-4xl md:text-5xl font-bold mb-4">
               Our <span className="bg-gradient-to-r from-lime-500 to-orange-500 bg-clip-text text-transparent">Products</span>
             </h1>
-            <p className="text-xl text-gray-400">
+            <p className="text-xl text-gray-600 dark:text-gray-400">
               {filteredAndSortedProducts.length} products available
             </p>
           </div>
@@ -263,7 +263,7 @@ export default function Products() {
           <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
             {/* Filters Sidebar */}
             <div className="lg:col-span-1">
-              <div className="bg-gray-700/50 rounded-2xl p-6 sticky top-24">
+              <div className="bg-gray-200 dark:bg-gray-700/50 rounded-2xl p-6 sticky top-24 transition-colors duration-300">
                 <div className="flex items-center gap-2 mb-6">
                   <SlidersHorizontal className="w-5 h-5 text-lime-500" />
                   <h2 className="text-xl font-bold">Filters</h2>
@@ -363,7 +363,7 @@ export default function Products() {
                     setSortBy('featured');
                     setCurrentPage(1);
                   }}
-                  className="w-full mt-6 bg-gray-800 hover:bg-gray-700 text-white px-4 py-2 rounded-lg transition-colors"
+                  className="w-full mt-6 bg-gray-300 dark:bg-gray-800 hover:bg-gray-400 dark:hover:bg-gray-700 text-gray-900 dark:text-white px-4 py-2 rounded-lg transition-colors"
                 >
                   Reset Filters
                 </button>
@@ -386,7 +386,7 @@ export default function Products() {
                   }>
                     {paginatedProducts.map((product) => (
                       viewMode === 'grid' ? (
-                        <div key={product.id} className="group bg-gray-800/50 backdrop-blur-sm rounded-2xl overflow-hidden shadow-xl hover:shadow-lime-500/10 transition-all duration-500 transform hover:-translate-y-2">
+                        <div key={product.id} className="group bg-white dark:bg-gray-800/50 backdrop-blur-sm rounded-2xl overflow-hidden shadow-xl hover:shadow-lime-500/10 transition-all duration-500 transform hover:-translate-y-2">
                           <div className="aspect-square overflow-hidden">
                             <img 
                               src={product.image} 
@@ -418,7 +418,7 @@ export default function Products() {
                           </div>
                         </div>
                       ) : (
-                        <div key={product.id} className="group bg-gray-800/50 backdrop-blur-sm rounded-2xl overflow-hidden shadow-xl hover:shadow-lime-500/10 transition-all duration-300 flex">
+                        <div key={product.id} className="group bg-white dark:bg-gray-800/50 backdrop-blur-sm rounded-2xl overflow-hidden shadow-xl hover:shadow-lime-500/10 transition-all duration-300 flex">
                           <div className="w-48 h-48 flex-shrink-0 overflow-hidden">
                             <img 
                               src={product.image} 
@@ -461,7 +461,7 @@ export default function Products() {
                       <button
                         onClick={() => handlePageChange(currentPage - 1)}
                         disabled={currentPage === 1}
-                        className="p-2 rounded-lg bg-gray-700 hover:bg-gray-600 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+                        className="p-2 rounded-lg bg-gray-300 dark:bg-gray-700 hover:bg-gray-400 dark:hover:bg-gray-600 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
                       >
                         <ChevronLeft className="w-5 h-5" />
                       </button>
@@ -498,7 +498,7 @@ export default function Products() {
                       <button
                         onClick={() => handlePageChange(currentPage + 1)}
                         disabled={currentPage === totalPages}
-                        className="p-2 rounded-lg bg-gray-700 hover:bg-gray-600 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+                        className="p-2 rounded-lg bg-gray-300 dark:bg-gray-700 hover:bg-gray-400 dark:hover:bg-gray-600 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
                       >
                         <ChevronRight className="w-5 h-5" />
                       </button>

@@ -4,7 +4,7 @@ interface SkeletonProps {
 }
 
 export default function Skeleton({ className = '', variant = 'rectangular' }: SkeletonProps) {
-  const baseStyles = 'animate-pulse bg-gradient-to-r from-gray-800 via-gray-700 to-gray-800 bg-[length:200%_100%]';
+  const baseStyles = 'animate-pulse bg-gradient-to-r from-gray-300 via-gray-200 to-gray-300 dark:from-gray-800 dark:via-gray-700 dark:to-gray-800 bg-[length:200%_100%] transition-colors duration-300';
   
   const variantStyles = {
     text: 'h-4 rounded',
@@ -20,7 +20,7 @@ export default function Skeleton({ className = '', variant = 'rectangular' }: Sk
 // Product Card Skeleton
 export function ProductCardSkeleton() {
   return (
-    <div className="bg-gray-800/50 backdrop-blur-sm rounded-2xl overflow-hidden shadow-xl">
+    <div className="bg-white dark:bg-gray-800/50 backdrop-blur-sm rounded-2xl overflow-hidden shadow-xl transition-colors duration-300">
       <Skeleton className="aspect-square w-full" />
       <div className="p-6">
         <Skeleton className="h-4 w-20 mb-2" />
