@@ -228,8 +228,57 @@ export default function Reviews() {
                 </div>
               </>
             ) : (
-              <div className="text-center py-12">
-                <p className="text-xl text-gray-600 dark:text-gray-400">No reviews found for this rating</p>
+              <div className="text-center py-20 animate-fade-in">
+                {/* Animated Icon */}
+                <div className="relative inline-block mb-8">
+                  <div className="absolute inset-0 bg-gradient-to-r from-lime-500/20 to-orange-500/20 rounded-full blur-3xl animate-pulse"></div>
+                  <div className="relative bg-gray-100 dark:bg-gray-800 rounded-full p-8 transition-colors duration-300">
+                    <Star className="w-24 h-24 mx-auto text-gray-400 dark:text-gray-600 animate-bounce" strokeWidth={1.5} />
+                  </div>
+                </div>
+
+                {/* Title */}
+                <h2 className="text-4xl md:text-5xl font-bold mb-4">
+                  No Reviews <span className="bg-gradient-to-r from-lime-500 to-orange-500 bg-clip-text text-transparent">Found</span>
+                </h2>
+
+                {/* Description */}
+                <p className="text-xl text-gray-600 dark:text-gray-400 mb-8 max-w-md mx-auto">
+                  We don't have any {selectedRating}-star reviews yet. Try viewing all reviews or a different rating.
+                </p>
+
+                {/* Clear Filter Button */}
+                <button
+                  onClick={() => setSelectedRating(null)}
+                  className="group inline-flex items-center gap-3 bg-gradient-to-r from-lime-500 to-orange-500 text-black px-8 py-4 rounded-full font-bold text-lg hover:shadow-2xl hover:shadow-lime-500/30 transition-all duration-300 transform hover:scale-105"
+                >
+                  <Filter className="w-5 h-5 group-hover:rotate-12 transition-transform duration-300" />
+                  <span>View All Reviews</span>
+                </button>
+
+                {/* Rating Options */}
+                <div className="mt-12 max-w-md mx-auto">
+                  <p className="text-sm font-semibold text-gray-700 dark:text-gray-300 mb-4">Try viewing reviews by rating:</p>
+                  <div className="flex flex-wrap gap-3 justify-center">
+                    {[5, 4, 3, 2, 1].map((rating) => {
+                      const count = testimonials.filter(t => t.rating === rating).length;
+                      if (count > 0 && rating !== selectedRating) {
+                        return (
+                          <button
+                            key={rating}
+                            onClick={() => setSelectedRating(rating)}
+                            className="inline-flex items-center gap-2 px-6 py-2 bg-gray-100 dark:bg-gray-800 hover:bg-lime-500 hover:text-black text-gray-700 dark:text-gray-300 rounded-full font-semibold transition-all duration-300 transform hover:scale-105"
+                          >
+                            <span>{rating}</span>
+                            <Star className="w-4 h-4 fill-current" />
+                            <span className="text-sm">({count})</span>
+                          </button>
+                        );
+                      }
+                      return null;
+                    })}
+                  </div>
+                </div>
               </div>
             )}
           </div>
