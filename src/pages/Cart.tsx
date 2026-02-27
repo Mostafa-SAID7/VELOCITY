@@ -1,52 +1,12 @@
-import React, { useState } from 'react';
 import { Trash2, Plus, Minus, ShoppingBag } from 'lucide-react';
 import { Link } from 'react-router-dom';
-
-interface CartItem {
-  id: number;
-  name: string;
-  price: number;
-  image: string;
-  quantity: number;
-  size: string;
-}
+import { useCart } from '../context/CartContext';
 
 export default function Cart() {
-  const [cartItems, setCartItems] = useState<CartItem[]>([
-    {
-      id: 1,
-      name: "Elite Pro Runner",
-      price: 189,
-      image: "https://images.pexels.com/photos/2529148/pexels-photo-2529148.jpeg?auto=compress&cs=tinysrgb&w=400",
-      quantity: 1,
-      size: "US 10"
-    },
-    {
-      id: 2,
-      name: "Court Dominator",
-      price: 199,
-      image: "https://images.pexels.com/photos/1598505/pexels-photo-1598505.jpeg?auto=compress&cs=tinysrgb&w=400",
-      quantity: 2,
-      size: "US 9.5"
-    }
-  ]);
-
-  const updateQuantity = (id: number, change: number) => {
-    setCartItems(cartItems.map(item => {
-      if (item.id === id) {
-        const newQuantity = Math.max(1, item.quantity + change);
-        return { ...item, quantity: newQuantity };
-      }
-      return item;
-    }));
-  };
-
-  const removeItem = (id: number) => {
-    setCartItems(cartItems.filter(item => item.id !== id));
-  };
+  const { cartItems, removeFromCart, updateQuantity } = useCart();
 
   const subtotal = cartItems.reduce((sum, item) => sum + (item.price * item.quantity), 0);
-  const shipping = 15;
+  const shipping = cartItems.length > 0 ? 15 : 0;
   const tax = subtotal * 0.08;
   const total = subtotal + shipping + tax;
 
@@ -81,7 +41,7 @@ export default function Cart() {
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
             <div className="lg:col-span-2 space-y-4">
               {cartItems.map((item) => (
-                <div key={item.id} className="bg-gray-800 rounded-2xl p-6 flex items-center gap-6">
+                <div key={`${item.id}-${item.size}`} className="bg-gray-800 rounded-2xl p-6 flex items-center gap-6">
                   <img 
                     src={item.image} 
                     alt={item.name}
@@ -90,21 +50,22 @@ export default function Cart() {
                   
                   <div className="flex-1">
                     <h3 className="text-xl font-bold mb-2">{item.name}</h3>
-                    <p className="text-gray-400 mb-2">Size: {item.size}</p>
+                    <p className="text-gray-400 mb-1">Size: {item.size}</p>
+                    <p className="text-sm text-lime-500 mb-2">{item.category}</p>
                     <p className="text-2xl font-bold text-orange-500">${item.price}</p>
                   </div>
 
                   <div className="flex items-center gap-4">
                     <div className="flex items-center bg-gray-700 rounded-full">
                       <button 
-                        onClick={() => updateQuantity(item.id, -1)}
+                        onClick={() => updateQuantity(item.id, item.quantity - 1)}
                         className="p-2 hover:bg-gray-600 rounded-full transition-colors"
                       >
                         <Minus className="w-4 h-4" />
                       </button>
                       <span className="px-4 font-bold">{item.quantity}</span>
                       <button 
-                        onClick={() => updateQuantity(item.id, 1)}
+                        onClick={() => updateQuantity(item.id, item.quantity + 1)}
                         className="p-2 hover:bg-gray-600 rounded-full transition-colors"
                       >
                         <Plus className="w-4 h-4" />
@@ -112,7 +73,7 @@ export default function Cart() {
                     </div>
 
                     <button 
-                      onClick={() => removeItem(item.id)}
+                      onClick={() => removeFromCart(item.id)}
                       className="p-2 hover:bg-red-500/20 rounded-full transition-colors text-red-500"
                     >
                       <Trash2 className="w-5 h-5" />
@@ -128,7 +89,7 @@ export default function Cart() {
                 
                 <div className="space-y-4 mb-6">
                   <div className="flex justify-between text-gray-400">
-                    <span>Subtotal</span>
+                    <span>Subtotal ({cartItems.reduce((sum, item) => sum + item.quantity, 0)} items)</span>
                     <span>${subtotal.toFixed(2)}</span>
                   </div>
                   <div className="flex justify-between text-gray-400">
@@ -136,7 +97,7 @@ export default function Cart() {
                     <span>${shipping.toFixed(2)}</span>
                   </div>
                   <div className="flex justify-between text-gray-400">
-                    <span>Tax</span>
+                    <span>Tax (8%)</span>
                     <span>${tax.toFixed(2)}</span>
                   </div>
                   <div className="border-t border-gray-700 pt-4">

@@ -1,5 +1,6 @@
 import { useState, useMemo } from 'react';
-import { Search, SlidersHorizontal, Grid, List, ChevronLeft, ChevronRight } from 'lucide-react';
+import { Search, SlidersHorizontal, Grid, List, ChevronLeft, ChevronRight, X, Check } from 'lucide-react';
+import { useCart } from '../context/CartContext';
 
 interface Product {
   id: number;
@@ -19,7 +20,14 @@ export default function Products() {
   const [sortBy, setSortBy] = useState('featured');
   const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid');
   const [currentPage, setCurrentPage] = useState(1);
+  const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
+  const [selectedSize, setSelectedSize] = useState('');
+  const [showNotification, setShowNotification] = useState(false);
   const itemsPerPage = 8;
+
+  const { addToCart } = useCart();
+
+  const sizes = ['US 7', 'US 7.5', 'US 8', 'US 8.5', 'US 9', 'US 9.5', 'US 10', 'US 10.5', 'US 11', 'US 11.5', 'US 12'];
 
   const allProducts: Product[] = [
     {
@@ -174,7 +182,7 @@ export default function Products() {
     }
 
     return filtered;
-  }, [searchQuery, selectedCategory, priceRange, sortBy, allProducts]);
+  }, [searchQuery, selectedCategory, priceRange, sortBy]);
 
   const totalPages = Math.ceil(filteredAndSortedProducts.length / itemsPerPage);
   const paginatedProducts = filteredAndSortedProducts.slice(
@@ -187,8 +195,89 @@ export default function Products() {
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
+  const handleAddToCart = (product: Product) => {
+    setSelectedProduct(product);
+    setSelectedSize('');
+  };
+
+  const confirmAddToCart = () => {
+    if (selectedProduct && selectedSize) {
+      addToCart({
+        id: selectedProduct.id,
+        name: selectedProduct.name,
+        price: selectedProduct.price,
+        image: selectedProduct.image,
+        size: selectedSize,
+        category: selectedProduct.category
+      });
+      setSelectedProduct(null);
+      setSelectedSize('');
+      setShowNotification(true);
+      setTimeout(() => setShowNotification(false), 3000);
+    }
+  };
+
   return (
     <div className="min-h-screen bg-gray-900 text-white pt-20">
+      {/* Add to Cart Notification */}
+      {showNotification && (
+        <div className="fixed top-20 right-4 z-50 bg-gradient-to-r from-lime-500 to-orange-500 text-black px-6 py-4 rounded-xl shadow-2xl flex items-center gap-3 animate-slide-in">
+          <Check className="w-6 h-6" />
+          <span className="font-semibold">Added to cart successfully!</span>
+        </div>
+      )}
+
+      {/* Size Selection Modal */}
+      {selectedProduct && (
+        <div className="fixed inset-0 bg-black/70 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+          <div className="bg-gray-800 rounded-2xl max-w-md w-full p-6 relative">
+            <button
+              onClick={() => setSelectedProduct(null)}
+              className="absolute top-4 right-4 p-2 hover:bg-gray-700 rounded-full transition-colors"
+            >
+              <X className="w-5 h-5" />
+            </button>
+
+            <h3 className="text-2xl font-bold mb-4">Select Size</h3>
+            <div className="flex items-center gap-4 mb-6">
+              <img
+                src={selectedProduct.image}
+                alt={selectedProduct.name}
+                className="w-20 h-20 object-cover rounded-xl"
+              />
+              <div>
+                <h4 className="font-bold text-lg">{selectedProduct.name}</h4>
+                <p className="text-orange-500 font-bold text-xl">${selectedProduct.price}</p>
+              </div>
+            </div>
+
+            <div className="grid grid-cols-3 gap-3 mb-6">
+              {sizes.map((size) => (
+                <button
+                  key={size}
+                  onClick={() => setSelectedSize(size)}
+                  className={`py-3 rounded-xl font-semibold transition-all ${
+                    selectedSize === size
+                      ? 'bg-lime-500 text-black'
+                      : 'bg-gray-700 hover:bg-gray-600 text-white'
+                  }`}
+                >
+                  {size}
+                </button>
+              ))}
+            </div>
+
+            <button
+              onClick={confirmAddToCart}
+              disabled={!selectedSize}
+              className="w-full bg-gradient-to-r from-lime-500 to-orange-500 text-black py-4 rounded-full font-bold hover:shadow-lg disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-300"
+            >
+              Add to Cart
+            </button>
+          </div>
+        </div>
+      )}
+
       <section className="py-12 bg-gray-800">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-8">
@@ -386,7 +475,10 @@ export default function Products() {
                             </div>
                             <div className="flex justify-between items-center">
                               <span className="text-2xl font-bold text-orange-500">${product.price}</span>
-                              <button className="bg-gradient-to-r from-lime-500 to-orange-500 text-black px-4 py-2 rounded-full font-semibold hover:shadow-lg transition-all duration-300 transform hover:scale-105">
+                              <button 
+                                onClick={() => handleAddToCart(product)}
+                                className="bg-gradient-to-r from-lime-500 to-orange-500 text-black px-4 py-2 rounded-full font-semibold hover:shadow-lg transition-all duration-300 transform hover:scale-105"
+                              >
                                 Add to Cart
                               </button>
                             </div>
@@ -417,7 +509,10 @@ export default function Products() {
                             </div>
                             <div className="flex justify-between items-center mt-4">
                               <span className="text-3xl font-bold text-orange-500">${product.price}</span>
-                              <button className="bg-gradient-to-r from-lime-500 to-orange-500 text-black px-6 py-3 rounded-full font-semibold hover:shadow-lg transition-all duration-300 transform hover:scale-105">
+                              <button 
+                                onClick={() => handleAddToCart(product)}
+                                className="bg-gradient-to-r from-lime-500 to-orange-500 text-black px-6 py-3 rounded-full font-semibold hover:shadow-lg transition-all duration-300 transform hover:scale-105"
+                              >
                                 Add to Cart
                               </button>
                             </div>

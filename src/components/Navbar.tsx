@@ -1,9 +1,11 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Menu, X, ShoppingBag } from 'lucide-react';
+import { useCart } from '../context/CartContext';
 
 export default function Navbar() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const { cartCount } = useCart();
 
   return (
     <nav className="fixed top-0 left-0 right-0 z-50 bg-gray-900/90 backdrop-blur-md border-b border-gray-800">
@@ -25,8 +27,13 @@ export default function Navbar() {
           </div>
 
           <div className="hidden md:flex items-center space-x-4">
-            <Link to="/cart" className="p-2 hover:bg-gray-800 rounded-full transition-colors duration-200">
+            <Link to="/cart" className="p-2 hover:bg-gray-800 rounded-full transition-colors duration-200 relative">
               <ShoppingBag className="w-5 h-5" />
+              {cartCount > 0 && (
+                <span className="absolute -top-1 -right-1 bg-gradient-to-r from-lime-500 to-orange-500 text-black text-xs font-bold rounded-full w-5 h-5 flex items-center justify-center">
+                  {cartCount}
+                </span>
+              )}
             </Link>
             <Link to="/signin" className="bg-gradient-to-r from-lime-500 to-orange-500 text-black px-6 py-2 rounded-full font-semibold hover:shadow-lg hover:shadow-lime-500/25 transition-all duration-300">
               Sign In
@@ -51,7 +58,14 @@ export default function Navbar() {
             <Link to="/products" className="block px-3 py-2 hover:bg-gray-800 rounded-md transition-colors duration-200" onClick={() => setIsMenuOpen(false)}>Products</Link>
             <Link to="/story" className="block px-3 py-2 hover:bg-gray-800 rounded-md transition-colors duration-200" onClick={() => setIsMenuOpen(false)}>Story</Link>
             <Link to="/reviews" className="block px-3 py-2 hover:bg-gray-800 rounded-md transition-colors duration-200" onClick={() => setIsMenuOpen(false)}>Reviews</Link>
-            <Link to="/cart" className="block px-3 py-2 hover:bg-gray-800 rounded-md transition-colors duration-200" onClick={() => setIsMenuOpen(false)}>Cart</Link>
+            <Link to="/cart" className="block px-3 py-2 hover:bg-gray-800 rounded-md transition-colors duration-200 flex items-center justify-between" onClick={() => setIsMenuOpen(false)}>
+              <span>Cart</span>
+              {cartCount > 0 && (
+                <span className="bg-gradient-to-r from-lime-500 to-orange-500 text-black text-xs font-bold rounded-full px-2 py-1">
+                  {cartCount}
+                </span>
+              )}
+            </Link>
             <Link to="/signin" className="block px-3 py-2 hover:bg-gray-800 rounded-md transition-colors duration-200" onClick={() => setIsMenuOpen(false)}>Sign In</Link>
           </div>
         </div>
