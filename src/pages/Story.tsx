@@ -1,7 +1,36 @@
-import React from 'react';
+import { useState, useEffect } from 'react';
 import { Award, Users, Zap, Target, Heart, TrendingUp } from 'lucide-react';
+import { getStats, Stats } from '../services/api';
 
 export default function Story() {
+  const [stats, setStats] = useState<Stats | null>(null);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchStats = async () => {
+      try {
+        const data = await getStats();
+        setStats(data);
+      } catch (error) {
+        console.error('Error fetching stats:', error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchStats();
+  }, []);
+
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-gray-900 text-white pt-20 flex items-center justify-center">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-16 w-16 border-t-2 border-b-2 border-lime-500 mx-auto mb-4"></div>
+          <p className="text-xl text-gray-400">Loading...</p>
+        </div>
+      </div>
+    );
+  }
   return (
     <div className="min-h-screen bg-gray-900 text-white pt-20">
       <section className="py-20 bg-gray-800">
@@ -52,24 +81,24 @@ export default function Story() {
               <div className="bg-gradient-to-r from-lime-500 to-orange-500 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
                 <Award className="w-8 h-8 text-black" />
               </div>
-              <div className="text-3xl font-bold text-lime-500 mb-2">50+</div>
-              <div className="text-gray-400">Awards Won</div>
+              <div className="text-3xl font-bold text-lime-500 mb-2">{stats?.awards.count}</div>
+              <div className="text-gray-400">{stats?.awards.label}</div>
             </div>
 
             <div className="bg-gray-900/50 backdrop-blur-sm rounded-2xl p-8 text-center">
               <div className="bg-gradient-to-r from-orange-500 to-red-500 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
                 <Users className="w-8 h-8 text-black" />
               </div>
-              <div className="text-3xl font-bold text-orange-500 mb-2">2M+</div>
-              <div className="text-gray-400">Athletes Trust Us</div>
+              <div className="text-3xl font-bold text-orange-500 mb-2">{stats?.athletes.count}</div>
+              <div className="text-gray-400">{stats?.athletes.label}</div>
             </div>
 
             <div className="bg-gray-900/50 backdrop-blur-sm rounded-2xl p-8 text-center">
               <div className="bg-gradient-to-r from-red-500 to-pink-500 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
                 <TrendingUp className="w-8 h-8 text-black" />
               </div>
-              <div className="text-3xl font-bold text-red-500 mb-2">15+</div>
-              <div className="text-gray-400">Years of Excellence</div>
+              <div className="text-3xl font-bold text-red-500 mb-2">{stats?.experience.count}</div>
+              <div className="text-gray-400">{stats?.experience.label}</div>
             </div>
           </div>
 

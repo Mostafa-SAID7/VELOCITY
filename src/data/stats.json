@@ -1,0 +1,17 @@
+{
+  "awards": {
+    "count": "50+",
+    "label": "Awards Won",
+    "icon": "award"
+  },
+  "athletes": {
+    "count": "2M+",
+    "label": "Athletes Trust Us",
+    "icon": "users"
+  },
+  "experience": {
+    "count": "15+",
+    "label": "Years of Excellence",
+    "icon": "trending"
+  }
+}

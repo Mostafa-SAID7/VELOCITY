@@ -1,19 +1,9 @@
-import { useState, useMemo } from 'react';
+import { useState, useMemo, useEffect } from 'react';
 import { Search, SlidersHorizontal, Grid, List, ChevronLeft, ChevronRight, X, Check } from 'lucide-react';
 import { useCart } from '../context/CartContext';
 import CustomDropdown from '../components/CustomDropdown';
 import Input from '../components/Input';
-
-interface Product {
-  id: number;
-  name: string;
-  price: number;
-  image: string;
-  category: string;
-  description: string;
-  rating: number;
-  reviews: number;
-}
+import { getProducts, getCategories, getSizes, Product as ProductType } from '../services/api';
 
 export default function Products() {
   const [searchQuery, setSearchQuery] = useState('');
@@ -22,139 +12,42 @@ export default function Products() {
   const [sortBy, setSortBy] = useState('featured');
   const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid');
   const [currentPage, setCurrentPage] = useState(1);
-  const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
+  const [selectedProduct, setSelectedProduct] = useState<ProductType | null>(null);
   const [selectedSize, setSelectedSize] = useState('');
   const [showNotification, setShowNotification] = useState(false);
   const itemsPerPage = 6;
 
+  // Data from API
+  const [allProducts, setAllProducts] = useState<ProductType[]>([]);
+  const [categories, setCategories] = useState<string[]>([]);
+  const [sizes, setSizes] = useState<string[]>([]);
+  const [loading, setLoading] = useState(true);
+
   const { addToCart } = useCart();
 
-  const sizes = ['US 7', 'US 7.5', 'US 8', 'US 8.5', 'US 9', 'US 9.5', 'US 10', 'US 10.5', 'US 11', 'US 11.5', 'US 12'];
+  // Fetch data on mount
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        setLoading(true);
+        const [productsData, categoriesData, sizesData] = await Promise.all([
+          getProducts(),
+          getCategories(),
+          getSizes()
+        ]);
+        
+        setAllProducts(productsData);
+        setCategories(['All', ...categoriesData.map(cat => cat.name)]);
+        setSizes(sizesData);
+      } catch (error) {
+        console.error('Error fetching data:', error);
+      } finally {
+        setLoading(false);
+      }
+    };
 
-  const allProducts: Product[] = [
-    {
-      id: 1,
-      name: "Elite Pro Runner",
-      price: 189,
-      image: "https://images.pexels.com/photos/2529148/pexels-photo-2529148.jpeg?auto=compress&cs=tinysrgb&w=400",
-      category: "Running",
-      description: "Lightweight running shoes with advanced cushioning technology",
-      rating: 4.8,
-      reviews: 234
-    },
-    {
-      id: 2,
-      name: "Power Lift Max",
-      price: 159,
-      image: "https://images.pexels.com/photos/1464625/pexels-photo-1464625.jpeg?auto=compress&cs=tinysrgb&w=400",
-      category: "Training",
-      description: "Heavy-duty training shoes for maximum stability",
-      rating: 4.6,
-      reviews: 189
-    },
-    {
-      id: 3,
-      name: "Court Dominator",
-      price: 199,
-      image: "https://images.pexels.com/photos/1598505/pexels-photo-1598505.jpeg?auto=compress&cs=tinysrgb&w=400",
-      category: "Basketball",
-      description: "High-performance basketball shoes with superior grip",
-      rating: 4.9,
-      reviews: 312
-    },
-    {
-      id: 4,
-      name: "Street Style Pro",
-      price: 149,
-      image: "https://images.pexels.com/photos/2529148/pexels-photo-2529148.jpeg?auto=compress&cs=tinysrgb&w=400",
-      category: "Lifestyle",
-      description: "Casual lifestyle shoes with premium comfort",
-      rating: 4.5,
-      reviews: 156
-    },
-    {
-      id: 5,
-      name: "Sprint Master",
-      price: 179,
-      image: "https://images.pexels.com/photos/2529148/pexels-photo-2529148.jpeg?auto=compress&cs=tinysrgb&w=400",
-      category: "Running",
-      description: "Speed-focused running shoes for competitive athletes",
-      rating: 4.7,
-      reviews: 201
-    },
-    {
-      id: 6,
-      name: "Flex Trainer",
-      price: 139,
-      image: "https://images.pexels.com/photos/1464625/pexels-photo-1464625.jpeg?auto=compress&cs=tinysrgb&w=400",
-      category: "Training",
-      description: "Versatile training shoes for all workout types",
-      rating: 4.4,
-      reviews: 143
-    },
-    {
-      id: 7,
-      name: "Slam Dunk Elite",
-      price: 209,
-      image: "https://images.pexels.com/photos/1598505/pexels-photo-1598505.jpeg?auto=compress&cs=tinysrgb&w=400",
-      category: "Basketball",
-      description: "Professional-grade basketball shoes with ankle support",
-      rating: 4.9,
-      reviews: 278
-    },
-    {
-      id: 8,
-      name: "Urban Walker",
-      price: 129,
-      image: "https://images.pexels.com/photos/2529148/pexels-photo-2529148.jpeg?auto=compress&cs=tinysrgb&w=400",
-      category: "Lifestyle",
-      description: "Comfortable everyday shoes for urban exploration",
-      rating: 4.3,
-      reviews: 98
-    },
-    {
-      id: 9,
-      name: "Marathon Beast",
-      price: 219,
-      image: "https://images.pexels.com/photos/2529148/pexels-photo-2529148.jpeg?auto=compress&cs=tinysrgb&w=400",
-      category: "Running",
-      description: "Long-distance running shoes with maximum energy return",
-      rating: 4.8,
-      reviews: 267
-    },
-    {
-      id: 10,
-      name: "CrossFit Champion",
-      price: 169,
-      image: "https://images.pexels.com/photos/1464625/pexels-photo-1464625.jpeg?auto=compress&cs=tinysrgb&w=400",
-      category: "Training",
-      description: "Multi-purpose training shoes for intense workouts",
-      rating: 4.7,
-      reviews: 223
-    },
-    {
-      id: 11,
-      name: "Hoop Legend",
-      price: 189,
-      image: "https://images.pexels.com/photos/1598505/pexels-photo-1598505.jpeg?auto=compress&cs=tinysrgb&w=400",
-      category: "Basketball",
-      description: "Mid-top basketball shoes with responsive cushioning",
-      rating: 4.6,
-      reviews: 187
-    },
-    {
-      id: 12,
-      name: "City Cruiser",
-      price: 119,
-      image: "https://images.pexels.com/photos/2529148/pexels-photo-2529148.jpeg?auto=compress&cs=tinysrgb&w=400",
-      category: "Lifestyle",
-      description: "Stylish casual shoes for everyday wear",
-      rating: 4.4,
-      reviews: 134
-    }
-  ];
-
-  const categories = ['All', 'Running', 'Training', 'Basketball', 'Lifestyle'];
+    fetchData();
+  }, []);
 
   const filteredAndSortedProducts = useMemo(() => {
     let filtered = allProducts.filter(product => {
@@ -197,7 +90,7 @@ export default function Products() {
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
-  const handleAddToCart = (product: Product) => {
+  const handleAddToCart = (product: ProductType) => {
     setSelectedProduct(product);
     setSelectedSize('');
   };
@@ -218,6 +111,17 @@ export default function Products() {
       setTimeout(() => setShowNotification(false), 3000);
     }
   };
+
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-gray-900 text-white pt-20 flex items-center justify-center">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-16 w-16 border-t-2 border-b-2 border-lime-500 mx-auto mb-4"></div>
+          <p className="text-xl text-gray-400">Loading products...</p>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-gray-900 text-white pt-20">

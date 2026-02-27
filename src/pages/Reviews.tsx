@@ -1,59 +1,26 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { Star, ChevronLeft, ChevronRight } from 'lucide-react';
+import { getTestimonials, Testimonial } from '../services/api';
 
 export default function Reviews() {
   const [currentTestimonial, setCurrentTestimonial] = useState(0);
+  const [testimonials, setTestimonials] = useState<Testimonial[]>([]);
+  const [loading, setLoading] = useState(true);
 
-  const testimonials = [
-    {
-      id: 1,
-      name: "Sarah Johnson",
-      role: "Marathon Runner",
-      image: "https://images.pexels.com/photos/1239291/pexels-photo-1239291.jpeg?auto=compress&cs=tinysrgb&w=100",
-      rating: 5,
-      text: "These shoes have transformed my running experience. The comfort and performance are unmatched. I've shaved minutes off my personal best!"
-    },
-    {
-      id: 2,
-      name: "Mike Chen",
-      role: "Personal Trainer",
-      image: "https://images.pexels.com/photos/1222271/pexels-photo-1222271.jpeg?auto=compress&cs=tinysrgb&w=100",
-      rating: 5,
-      text: "Premium quality that delivers results. I recommend these to all my clients. The durability and support are exceptional."
-    },
-    {
-      id: 3,
-      name: "Emily Rodriguez",
-      role: "Basketball Player",
-      image: "https://images.pexels.com/photos/1310522/pexels-photo-1310522.jpeg?auto=compress&cs=tinysrgb&w=100",
-      rating: 5,
-      text: "The perfect combination of style and performance. These have become my go-to for every game. The grip is incredible!"
-    },
-    {
-      id: 4,
-      name: "David Thompson",
-      role: "CrossFit Athlete",
-      image: "https://images.pexels.com/photos/1222271/pexels-photo-1222271.jpeg?auto=compress&cs=tinysrgb&w=100",
-      rating: 5,
-      text: "Velocity shoes handle everything I throw at them. From heavy lifts to box jumps, they provide the stability and flexibility I need."
-    },
-    {
-      id: 5,
-      name: "Lisa Park",
-      role: "Yoga Instructor",
-      image: "https://images.pexels.com/photos/1239291/pexels-photo-1239291.jpeg?auto=compress&cs=tinysrgb&w=100",
-      rating: 5,
-      text: "Comfortable for all-day wear and perfect for my active lifestyle. The design is sleek and the quality is outstanding."
-    },
-    {
-      id: 6,
-      name: "James Wilson",
-      role: "Track & Field Coach",
-      image: "https://images.pexels.com/photos/1222271/pexels-photo-1222271.jpeg?auto=compress&cs=tinysrgb&w=100",
-      rating: 5,
-      text: "I've been coaching for 20 years, and Velocity makes some of the best athletic shoes I've seen. My athletes love them!"
-    }
-  ];
+  useEffect(() => {
+    const fetchTestimonials = async () => {
+      try {
+        const data = await getTestimonials();
+        setTestimonials(data);
+      } catch (error) {
+        console.error('Error fetching testimonials:', error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchTestimonials();
+  }, []);
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -69,6 +36,25 @@ export default function Reviews() {
   const prevTestimonial = () => {
     setCurrentTestimonial((prev) => (prev - 1 + testimonials.length) % testimonials.length);
   };
+
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-gray-900 text-white pt-20 flex items-center justify-center">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-16 w-16 border-t-2 border-b-2 border-lime-500 mx-auto mb-4"></div>
+          <p className="text-xl text-gray-400">Loading reviews...</p>
+        </div>
+      </div>
+    );
+  }
+
+  if (testimonials.length === 0) {
+    return (
+      <div className="min-h-screen bg-gray-900 text-white pt-20 flex items-center justify-center">
+        <p className="text-xl text-gray-400">No reviews available</p>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-gray-900 text-white pt-20">
