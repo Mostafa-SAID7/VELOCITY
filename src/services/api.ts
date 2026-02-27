@@ -44,51 +44,53 @@ export interface Stats {
 // Products API
 export const getProducts = async (): Promise<Product[]> => {
   await delay(300); // Simulate network delay
-  return productsData;
+  return productsData as Product[];
 };
 
 export const getProductById = async (id: number): Promise<Product | undefined> => {
   await delay(200);
-  return productsData.find(product => product.id === id);
+  return (productsData as Product[]).find(product => product.id === id);
 };
 
 export const getProductsByCategory = async (category: string): Promise<Product[]> => {
   await delay(300);
+  const products = productsData as Product[];
   if (category === 'All' || category === 'all') {
-    return productsData;
+    return products;
   }
-  return productsData.filter(product => product.category === category);
+  return products.filter(product => product.category === category);
 };
 
 // Testimonials API
 export const getTestimonials = async (): Promise<Testimonial[]> => {
   await delay(300);
-  return testimonialsData;
+  return testimonialsData as Testimonial[];
 };
 
 // Categories API
 export const getCategories = async (): Promise<Category[]> => {
   await delay(200);
-  return categoriesData;
+  return categoriesData as Category[];
 };
 
 // Sizes API
 export const getSizes = async (): Promise<string[]> => {
   await delay(100);
-  return sizesData;
+  return sizesData as string[];
 };
 
 // Stats API
 export const getStats = async (): Promise<Stats> => {
   await delay(200);
-  return statsData;
+  return statsData as Stats;
 };
 
 // Search Products
 export const searchProducts = async (query: string): Promise<Product[]> => {
   await delay(300);
   const lowerQuery = query.toLowerCase();
-  return productsData.filter(product => 
+  const products = productsData as Product[];
+  return products.filter(product => 
     product.name.toLowerCase().includes(lowerQuery) ||
     product.description.toLowerCase().includes(lowerQuery) ||
     product.category.toLowerCase().includes(lowerQuery)
@@ -105,7 +107,7 @@ export interface FilterOptions {
 
 export const filterProducts = async (filters: FilterOptions): Promise<Product[]> => {
   await delay(300);
-  let filtered = [...productsData];
+  let filtered = [...(productsData as Product[])];
 
   if (filters.category && filters.category !== 'All') {
     filtered = filtered.filter(p => p.category === filters.category);
