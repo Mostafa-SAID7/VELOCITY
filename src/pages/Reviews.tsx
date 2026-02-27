@@ -1,18 +1,22 @@
 import { useState, useEffect } from 'react';
-import { Star, ChevronLeft, ChevronRight } from 'lucide-react';
+import { Star, ChevronLeft, ChevronRight, Filter } from 'lucide-react';
+import { Link } from 'react-router-dom';
 import { getTestimonials, Testimonial } from '../services/api';
 import { TestimonialSkeleton } from '../components/Skeleton';
 
 export default function Reviews() {
   const [currentTestimonial, setCurrentTestimonial] = useState(0);
   const [testimonials, setTestimonials] = useState<Testimonial[]>([]);
+  const [filteredTestimonials, setFilteredTestimonials] = useState<Testimonial[]>([]);
   const [loading, setLoading] = useState(true);
+  const [selectedRating, setSelectedRating] = useState<number | null>(null);
 
   useEffect(() => {
     const fetchTestimonials = async () => {
       try {
         const data = await getTestimonials();
         setTestimonials(data);
+        setFilteredTestimonials(data);
       } catch (error) {
         console.error('Error fetching testimonials:', error);
       } finally {
@@ -24,19 +28,41 @@ export default function Reviews() {
   }, []);
 
   useEffect(() => {
+    if (selectedRating) {
+      setFilteredTestimonials(testimonials.filter(t => t.rating === selectedRating));
+    } else {
+      setFilteredTestimonials(testimonials);
+    }
+    setCurrentTestimonial(0);
+  }, [selectedRating, testimonials]);
+
+  useEffect(() => {
     const interval = setInterval(() => {
-      setCurrentTestimonial((prev) => (prev + 1) % testimonials.length);
+      setCurrentTestimonial((prev) => (prev + 1) % filteredTestimonials.length);
     }, 5000);
     return () => clearInterval(interval);
-  }, [testimonials.length]);
+  }, [filteredTestimonials.length]);
 
   const nextTestimonial = () => {
-    setCurrentTestimonial((prev) => (prev + 1) % testimonials.length);
+    setCurrentTestimonial((prev) => (prev + 1) % filteredTestimonials.length);
   };
 
   const prevTestimonial = () => {
-    setCurrentTestimonial((prev) => (prev - 1 + testimonials.length) % testimonials.length);
+    setCurrentTestimonial((prev) => (prev - 1 + filteredTestimonials.length) % filteredTestimonials.length);
   };
+
+  const getRatingBreakdown = () => {
+    const breakdown = [5, 4, 3, 2, 1].map(rating => ({
+      rating,
+      count: testimonials.filter(t => t.rating === rating).length,
+      percentage: (testimonials.filter(t => t.rating === rating).length / testimonials.length) * 100
+    }));
+    return breakdown;
+  };
+
+  const averageRating = testimonials.length > 0
+    ? (testimonials.reduce((sum, t) => sum + t.rating, 0) / testimonials.length).toFixed(1)
+    : '0.0';
 
   if (loading) {
     return (
@@ -97,59 +123,119 @@ export default function Reviews() {
             </p>
           </div>
 
-          <div className="relative max-w-4xl mx-auto mb-20">
-            <div className="bg-white dark:bg-gray-900/50 backdrop-blur-sm rounded-2xl p-8 md:p-12 shadow-2xl transition-colors duration-300">
-              <div className="flex items-center mb-6">
-                <img 
-                  src={testimonials[currentTestimonial].image} 
-                  alt={testimonials[currentTestimonial].name}
-                  className="w-16 h-16 rounded-full object-cover mr-6"
-                />
-                <div>
-                  <h4 className="text-xl font-bold">{testimonials[currentTestimonial].name}</h4>
-                  <p className="text-lime-500 font-semibold">{testimonials[currentTestimonial].role}</p>
-                  <div className="flex items-center mt-2">
-                    {[...Array(testimonials[currentTestimonial].rating)].map((_, i) => (
-                      <Star key={i} className="w-5 h-5 text-orange-500 fill-current" />
-                    ))}
-                  </div>
+          {/* Rating Overview */}
+          <div className="max-w-4xl mx-auto mb-16 bg-white dark:bg-gray-800 rounded-2xl p-8 shadow-xl transition-colors duration-300">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+              {/* Average Rating */}
+              <div className="text-center md:border-r border-gray-300 dark:border-gray-700">
+                <div className="text-6xl font-bold text-lime-500 mb-2">{averageRating}</div>
+                <div className="flex items-center justify-center mb-2">
+                  {[...Array(5)].map((_, i) => (
+                    <Star key={i} className={`w-6 h-6 ${i < Math.floor(parseFloat(averageRating)) ? 'text-orange-500 fill-current' : 'text-gray-400'}`} />
+                  ))}
                 </div>
+                <p className="text-gray-600 dark:text-gray-400">Based on {testimonials.length} reviews</p>
               </div>
-              <p className="text-xl text-gray-600 dark:text-gray-300 leading-relaxed italic">
-                "{testimonials[currentTestimonial].text}"
-              </p>
+
+              {/* Rating Breakdown */}
+              <div className="space-y-2">
+                {getRatingBreakdown().map(({ rating, count, percentage }) => (
+                  <button
+                    key={rating}
+                    onClick={() => setSelectedRating(selectedRating === rating ? null : rating)}
+                    className={`w-full flex items-center gap-3 p-2 rounded-lg transition-all duration-300 ${
+                      selectedRating === rating
+                        ? 'bg-lime-500/20'
+                        : 'hover:bg-gray-100 dark:hover:bg-gray-700'
+                    }`}
+                  >
+                    <span className="text-sm font-semibold w-12">{rating} star</span>
+                    <div className="flex-1 bg-gray-200 dark:bg-gray-700 rounded-full h-2 overflow-hidden">
+                      <div
+                        className="bg-gradient-to-r from-lime-500 to-orange-500 h-full transition-all duration-500"
+                        style={{ width: `${percentage}%` }}
+                      ></div>
+                    </div>
+                    <span className="text-sm text-gray-600 dark:text-gray-400 w-12 text-right">{count}</span>
+                  </button>
+                ))}
+              </div>
             </div>
 
-            <button 
-              onClick={prevTestimonial}
-              className="absolute left-4 top-1/2 transform -translate-y-1/2 bg-gray-300 dark:bg-gray-700/50 hover:bg-lime-500 dark:hover:bg-lime-500 w-12 h-12 rounded-full flex items-center justify-center transition-all duration-300"
-            >
-              <ChevronLeft className="w-6 h-6" />
-            </button>
-            <button 
-              onClick={nextTestimonial}
-              className="absolute right-4 top-1/2 transform -translate-y-1/2 bg-gray-300 dark:bg-gray-700/50 hover:bg-lime-500 dark:hover:bg-lime-500 w-12 h-12 rounded-full flex items-center justify-center transition-all duration-300"
-            >
-              <ChevronRight className="w-6 h-6" />
-            </button>
-
-            <div className="flex justify-center mt-8 space-x-2">
-              {testimonials.map((_, index) => (
+            {selectedRating && (
+              <div className="mt-6 text-center">
                 <button
-                  key={index}
-                  onClick={() => setCurrentTestimonial(index)}
-                  className={`w-3 h-3 rounded-full transition-all duration-300 ${
-                    index === currentTestimonial 
-                      ? 'bg-lime-500 scale-125' 
-                      : 'bg-gray-400 dark:bg-gray-600 hover:bg-gray-500 dark:hover:bg-gray-500'
-                  }`}
-                />
-              ))}
-            </div>
+                  onClick={() => setSelectedRating(null)}
+                  className="inline-flex items-center gap-2 text-lime-500 hover:text-lime-400 font-semibold transition-colors"
+                >
+                  <Filter className="w-4 h-4" />
+                  <span>Clear Filter</span>
+                </button>
+              </div>
+            )}
+          </div>
+
+          <div className="relative max-w-4xl mx-auto mb-20">
+            {filteredTestimonials.length > 0 ? (
+              <>
+                <div className="bg-white dark:bg-gray-900/50 backdrop-blur-sm rounded-2xl p-8 md:p-12 shadow-2xl transition-colors duration-300">
+                  <div className="flex items-center mb-6">
+                    <img 
+                      src={filteredTestimonials[currentTestimonial].image} 
+                      alt={filteredTestimonials[currentTestimonial].name}
+                      className="w-16 h-16 rounded-full object-cover mr-6"
+                    />
+                    <div>
+                      <h4 className="text-xl font-bold">{filteredTestimonials[currentTestimonial].name}</h4>
+                      <p className="text-lime-500 font-semibold">{filteredTestimonials[currentTestimonial].role}</p>
+                      <div className="flex items-center mt-2">
+                        {[...Array(filteredTestimonials[currentTestimonial].rating)].map((_, i) => (
+                          <Star key={i} className="w-5 h-5 text-orange-500 fill-current" />
+                        ))}
+                      </div>
+                    </div>
+                  </div>
+                  <p className="text-xl text-gray-600 dark:text-gray-300 leading-relaxed italic">
+                    "{filteredTestimonials[currentTestimonial].text}"
+                  </p>
+                </div>
+
+                <button 
+                  onClick={prevTestimonial}
+                  className="absolute left-4 top-1/2 transform -translate-y-1/2 bg-gray-300 dark:bg-gray-700/50 hover:bg-lime-500 dark:hover:bg-lime-500 w-12 h-12 rounded-full flex items-center justify-center transition-all duration-300"
+                >
+                  <ChevronLeft className="w-6 h-6" />
+                </button>
+                <button 
+                  onClick={nextTestimonial}
+                  className="absolute right-4 top-1/2 transform -translate-y-1/2 bg-gray-300 dark:bg-gray-700/50 hover:bg-lime-500 dark:hover:bg-lime-500 w-12 h-12 rounded-full flex items-center justify-center transition-all duration-300"
+                >
+                  <ChevronRight className="w-6 h-6" />
+                </button>
+
+                <div className="flex justify-center mt-8 space-x-2">
+                  {filteredTestimonials.map((_, index) => (
+                    <button
+                      key={index}
+                      onClick={() => setCurrentTestimonial(index)}
+                      className={`w-3 h-3 rounded-full transition-all duration-300 ${
+                        index === currentTestimonial 
+                          ? 'bg-lime-500 scale-125' 
+                          : 'bg-gray-400 dark:bg-gray-600 hover:bg-gray-500 dark:hover:bg-gray-500'
+                      }`}
+                    />
+                  ))}
+                </div>
+              </>
+            ) : (
+              <div className="text-center py-12">
+                <p className="text-xl text-gray-600 dark:text-gray-400">No reviews found for this rating</p>
+              </div>
+            )}
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            {testimonials.slice(0, 3).map((testimonial) => (
+            {filteredTestimonials.slice(0, 3).map((testimonial) => (
               <div key={testimonial.id} className="bg-white dark:bg-gray-900/50 backdrop-blur-sm rounded-2xl p-6 shadow-xl transition-colors duration-300">
                 <div className="flex items-center mb-4">
                   <img 
@@ -170,6 +256,24 @@ export default function Reviews() {
                 <p className="text-gray-600 dark:text-gray-300 text-sm italic">"{testimonial.text}"</p>
               </div>
             ))}
+          </div>
+
+          {/* CTA Section */}
+          <div className="mt-20 text-center">
+            <div className="bg-gradient-to-r from-lime-500 via-orange-500 to-red-500 rounded-3xl p-12 animate-scale-in">
+              <h2 className="text-4xl md:text-5xl font-bold text-black mb-4">
+                Ready to Join Them?
+              </h2>
+              <p className="text-xl text-black/80 mb-8 max-w-2xl mx-auto">
+                Experience the quality that thousands of athletes trust
+              </p>
+              <Link
+                to="/products"
+                className="inline-block bg-black text-white px-8 py-4 rounded-full font-bold hover:bg-gray-800 transition-all duration-300 transform hover:scale-105"
+              >
+                Shop Now
+              </Link>
+            </div>
           </div>
         </div>
       </section>
