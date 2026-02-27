@@ -27,10 +27,13 @@ export default function Input({
   max,
   label
 }: InputProps) {
+  // Generate a unique id if name is provided
+  const inputId = name ? `input-${name}` : undefined;
+
   return (
     <div className={className}>
       {label && (
-        <label className="block text-sm font-semibold mb-2 text-gray-700 dark:text-gray-300">{label}</label>
+        <label htmlFor={inputId} className="block text-sm font-semibold mb-2 text-gray-700 dark:text-gray-300">{label}</label>
       )}
       <div className="relative">
         {icon && (
@@ -39,6 +42,7 @@ export default function Input({
           </div>
         )}
         <input
+          id={inputId}
           type={type}
           name={name}
           value={value}

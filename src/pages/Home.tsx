@@ -318,6 +318,8 @@ export default function Home() {
             </p>
             <form onSubmit={handleSubscribe} className="max-w-md mx-auto flex gap-4">
               <input 
+                id="newsletter-email"
+                name="email"
                 type="email" 
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}

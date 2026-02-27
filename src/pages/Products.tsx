@@ -249,6 +249,7 @@ export default function Products() {
             <div className="flex-1">
               <Input
                 type="text"
+                name="search"
                 value={searchQuery}
                 onChange={(value) => {
                   setSearchQuery(value);
@@ -324,6 +325,8 @@ export default function Products() {
                       <span>${priceRange[1]}</span>
                     </div>
                     <input
+                      id="price-range-slider"
+                      name="priceRange"
                       type="range"
                       min="0"
                       max="300"
@@ -337,6 +340,7 @@ export default function Products() {
                     <div className="flex gap-2">
                       <Input
                         type="number"
+                        name="minPrice"
                         value={priceRange[0].toString()}
                         onChange={(value) => {
                           setPriceRange([parseInt(value) || 0, priceRange[1]]);
@@ -348,6 +352,7 @@ export default function Products() {
                       />
                       <Input
                         type="number"
+                        name="maxPrice"
                         value={priceRange[1].toString()}
                         onChange={(value) => {
                           setPriceRange([priceRange[0], parseInt(value) || 300]);

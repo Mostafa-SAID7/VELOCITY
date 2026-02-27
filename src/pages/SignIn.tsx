@@ -123,7 +123,12 @@ export default function SignIn() {
               {!isSignUp && (
                 <div className="flex items-center justify-between">
                   <label className="flex items-center">
-                    <input type="checkbox" className="mr-2" />
+                    <input 
+                      id="remember-me"
+                      name="rememberMe"
+                      type="checkbox" 
+                      className="mr-2" 
+                    />
                     <span className="text-sm text-gray-600 dark:text-gray-400">Remember me</span>
                   </label>
                   <a href="#" className="text-sm text-lime-500 hover:text-lime-400 transition-colors">

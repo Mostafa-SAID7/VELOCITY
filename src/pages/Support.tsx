@@ -245,22 +245,30 @@ export default function Support() {
                 <form className="space-y-4">
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <input
+                      id="contact-name"
+                      name="name"
                       type="text"
                       placeholder="Your Name"
                       className="w-full px-4 py-3 rounded-xl bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 focus:outline-none focus:ring-2 focus:ring-lime-500 transition-colors"
                     />
                     <input
+                      id="contact-email"
+                      name="email"
                       type="email"
                       placeholder="Your Email"
                       className="w-full px-4 py-3 rounded-xl bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 focus:outline-none focus:ring-2 focus:ring-lime-500 transition-colors"
                     />
                   </div>
                   <input
+                    id="contact-subject"
+                    name="subject"
                     type="text"
                     placeholder="Subject"
                     className="w-full px-4 py-3 rounded-xl bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 focus:outline-none focus:ring-2 focus:ring-lime-500 transition-colors"
                   />
                   <textarea
+                    id="contact-message"
+                    name="message"
                     rows={6}
                     placeholder="Your Message"
                     className="w-full px-4 py-3 rounded-xl bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 focus:outline-none focus:ring-2 focus:ring-lime-500 transition-colors"
