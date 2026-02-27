@@ -39,7 +39,8 @@ export default function Products() {
         ]);
         
         setAllProducts(productsData);
-        setCategories(['All', ...categoriesData.map(cat => cat.name)]);
+        // Categories already include "All" from API, no need to add it again
+        setCategories(categoriesData.map(cat => cat.name));
         setSizes(sizesData);
       } catch (error) {
         console.error('Error fetching data:', error);
@@ -191,7 +192,7 @@ export default function Products() {
                   className={`py-3 rounded-xl font-semibold transition-all ${
                     selectedSize === size
                       ? 'bg-lime-500 text-black'
-                      : 'bg-gray-700 hover:bg-gray-600 text-white'
+                      : 'bg-gray-200 dark:bg-gray-700 hover:bg-gray-300 dark:hover:bg-gray-600 text-gray-900 dark:text-white'
                   }`}
                 >
                   {size}
@@ -242,7 +243,7 @@ export default function Products() {
                 className={`p-3 rounded-xl transition-all ${
                   viewMode === 'grid' 
                     ? 'bg-lime-500 text-black' 
-                    : 'bg-gray-700 text-white hover:bg-gray-600'
+                    : 'bg-white dark:bg-gray-700 text-gray-700 dark:text-white hover:bg-gray-100 dark:hover:bg-gray-600'
                 }`}
               >
                 <Grid className="w-5 h-5" />
@@ -252,7 +253,7 @@ export default function Products() {
                 className={`p-3 rounded-xl transition-all ${
                   viewMode === 'list' 
                     ? 'bg-lime-500 text-black' 
-                    : 'bg-gray-700 text-white hover:bg-gray-600'
+                    : 'bg-white dark:bg-gray-700 text-gray-700 dark:text-white hover:bg-gray-100 dark:hover:bg-gray-600'
                 }`}
               >
                 <List className="w-5 h-5" />
@@ -271,7 +272,7 @@ export default function Products() {
 
                 {/* Category Filter */}
                 <div className="mb-6">
-                  <h3 className="font-semibold mb-3 text-gray-300">Category</h3>
+                  <h3 className="font-semibold mb-3 text-gray-700 dark:text-gray-300">Category</h3>
                   <div className="space-y-2">
                     {categories.map((category) => (
                       <button
@@ -283,7 +284,7 @@ export default function Products() {
                         className={`w-full text-left px-4 py-2 rounded-lg transition-all ${
                           selectedCategory === category
                             ? 'bg-lime-500 text-black font-semibold'
-                            : 'bg-gray-800 text-gray-300 hover:bg-gray-700'
+                            : 'bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700'
                         }`}
                       >
                         {category}
@@ -294,9 +295,9 @@ export default function Products() {
 
                 {/* Price Range Filter */}
                 <div className="mb-6">
-                  <h3 className="font-semibold mb-3 text-gray-300">Price Range</h3>
+                  <h3 className="font-semibold mb-3 text-gray-700 dark:text-gray-300">Price Range</h3>
                   <div className="space-y-4">
-                    <div className="flex justify-between text-sm text-gray-400">
+                    <div className="flex justify-between text-sm text-gray-600 dark:text-gray-400">
                       <span>${priceRange[0]}</span>
                       <span>${priceRange[1]}</span>
                     </div>
@@ -374,8 +375,8 @@ export default function Products() {
             <div className="lg:col-span-3">
               {paginatedProducts.length === 0 ? (
                 <div className="text-center py-20">
-                  <p className="text-2xl text-gray-400">No products found</p>
-                  <p className="text-gray-500 mt-2">Try adjusting your filters</p>
+                  <p className="text-2xl text-gray-600 dark:text-gray-400">No products found</p>
+                  <p className="text-gray-500 dark:text-gray-500 mt-2">Try adjusting your filters</p>
                 </div>
               ) : (
                 <>
@@ -397,14 +398,14 @@ export default function Products() {
                           <div className="p-6">
                             <div className="text-sm text-lime-500 font-semibold mb-2">{product.category}</div>
                             <h3 className="text-xl font-bold mb-2 group-hover:text-lime-500 transition-colors duration-300">{product.name}</h3>
-                            <p className="text-gray-400 text-sm mb-3">{product.description}</p>
+                            <p className="text-gray-600 dark:text-gray-400 text-sm mb-3">{product.description}</p>
                             <div className="flex items-center gap-2 mb-4">
                               <div className="flex items-center">
                                 {[...Array(5)].map((_, i) => (
-                                  <span key={i} className={`text-sm ${i < Math.floor(product.rating) ? 'text-orange-500' : 'text-gray-600'}`}>★</span>
+                                  <span key={i} className={`text-sm ${i < Math.floor(product.rating) ? 'text-orange-500' : 'text-gray-400 dark:text-gray-600'}`}>★</span>
                                 ))}
                               </div>
-                              <span className="text-sm text-gray-400">({product.reviews})</span>
+                              <span className="text-sm text-gray-600 dark:text-gray-400">({product.reviews})</span>
                             </div>
                             <div className="flex justify-between items-center">
                               <span className="text-2xl font-bold text-orange-500">${product.price}</span>
@@ -430,14 +431,14 @@ export default function Products() {
                             <div>
                               <div className="text-sm text-lime-500 font-semibold mb-2">{product.category}</div>
                               <h3 className="text-2xl font-bold mb-2 group-hover:text-lime-500 transition-colors duration-300">{product.name}</h3>
-                              <p className="text-gray-400 mb-3">{product.description}</p>
+                              <p className="text-gray-600 dark:text-gray-400 mb-3">{product.description}</p>
                               <div className="flex items-center gap-2">
                                 <div className="flex items-center">
                                   {[...Array(5)].map((_, i) => (
-                                    <span key={i} className={`${i < Math.floor(product.rating) ? 'text-orange-500' : 'text-gray-600'}`}>★</span>
+                                    <span key={i} className={`${i < Math.floor(product.rating) ? 'text-orange-500' : 'text-gray-400 dark:text-gray-600'}`}>★</span>
                                   ))}
                                 </div>
-                                <span className="text-gray-400">({product.reviews} reviews)</span>
+                                <span className="text-gray-600 dark:text-gray-400">({product.reviews} reviews)</span>
                               </div>
                             </div>
                             <div className="flex justify-between items-center mt-4">
@@ -480,7 +481,7 @@ export default function Products() {
                               className={`px-4 py-2 rounded-lg font-semibold transition-all ${
                                 currentPage === page
                                   ? 'bg-lime-500 text-black'
-                                  : 'bg-gray-700 hover:bg-gray-600 text-white'
+                                  : 'bg-white dark:bg-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 text-gray-900 dark:text-white'
                               }`}
                             >
                               {page}
@@ -490,7 +491,7 @@ export default function Products() {
                           page === currentPage - 2 ||
                           page === currentPage + 2
                         ) {
-                          return <span key={page} className="text-gray-500">...</span>;
+                          return <span key={page} className="text-gray-500 dark:text-gray-500">...</span>;
                         }
                         return null;
                       })}
