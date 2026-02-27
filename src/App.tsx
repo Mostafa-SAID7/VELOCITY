@@ -10,6 +10,7 @@ import Story from './pages/Story';
 import Reviews from './pages/Reviews';
 import Cart from './pages/Cart';
 import SignIn from './pages/SignIn';
+import NotFound from './pages/NotFound';
 
 function App() {
   return (
@@ -26,6 +27,7 @@ function App() {
                 <Route path="/reviews" element={<Reviews />} />
                 <Route path="/cart" element={<Cart />} />
                 <Route path="/signin" element={<SignIn />} />
+                <Route path="*" element={<NotFound />} />
               </Routes>
               <Footer />
             </div>
