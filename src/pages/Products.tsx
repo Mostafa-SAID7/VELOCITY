@@ -40,7 +40,6 @@ export default function Products() {
         setAllProducts(productsData);
         setCategories(['All', ...categoriesData.map(cat => cat.name)]);
         setSizes(sizesData);
-        toast.success('Products loaded successfully!');
       } catch (error) {
         console.error('Error fetching data:', error);
         toast.error('Failed to load products. Please try again.');
@@ -50,7 +49,8 @@ export default function Products() {
     };
 
     fetchData();
-  }, [toast]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []); // Only run once on mount
 
   const filteredAndSortedProducts = useMemo(() => {
     let filtered = allProducts.filter(product => {
