@@ -47,7 +47,7 @@ export default function CustomDropdown({
   return (
     <div className={className} ref={dropdownRef}>
       {label && (
-        <label className="block text-sm font-semibold mb-3 text-gray-300">{label}</label>
+        <label className="block text-sm font-semibold mb-3 text-gray-700 dark:text-gray-300">{label}</label>
       )}
       
       <div className="relative">
@@ -55,9 +55,9 @@ export default function CustomDropdown({
         <button
           type="button"
           onClick={() => setIsOpen(!isOpen)}
-          className="w-full bg-gray-800 text-white px-4 py-3 pr-10 rounded-lg border border-gray-700 focus:outline-none focus:ring-2 focus:ring-lime-500 focus:border-transparent transition-all cursor-pointer hover:bg-gray-700 hover:border-gray-600 shadow-sm text-left"
+          className="w-full bg-white dark:bg-gray-800 text-gray-900 dark:text-white px-4 py-3 pr-10 rounded-lg border border-gray-300 dark:border-gray-700 focus:outline-none focus:ring-2 focus:ring-lime-500 focus:border-transparent transition-all cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-700 hover:border-gray-400 dark:hover:border-gray-600 shadow-sm text-left"
         >
-          <span className={selectedOption ? 'text-white' : 'text-gray-400'}>
+          <span className={selectedOption ? 'text-gray-900 dark:text-white' : 'text-gray-400'}>
             {selectedOption ? selectedOption.label : placeholder || 'Select...'}
           </span>
         </button>
@@ -73,7 +73,7 @@ export default function CustomDropdown({
 
         {/* Dropdown Menu */}
         {isOpen && (
-          <div className="absolute z-50 w-full mt-2 bg-gray-800 border border-gray-700 rounded-lg shadow-2xl overflow-hidden animate-slide-down">
+          <div className="absolute z-50 w-full mt-2 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-700 rounded-lg shadow-2xl overflow-hidden animate-slide-down">
             <div className="max-h-60 overflow-y-auto custom-scrollbar">
               {options.map((option) => (
                 <button
@@ -83,7 +83,7 @@ export default function CustomDropdown({
                   className={`w-full px-4 py-3 text-left transition-all flex items-center justify-between ${
                     option.value === value
                       ? 'bg-lime-500 text-black font-semibold'
-                      : 'text-white hover:bg-gray-700'
+                      : 'text-gray-900 dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700'
                   }`}
                 >
                   <span>{option.label}</span>

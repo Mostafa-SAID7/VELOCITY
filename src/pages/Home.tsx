@@ -21,7 +21,7 @@ export default function Home() {
     setEmail('');
   };
   return (
-    <div className="min-h-screen bg-gray-900 text-white">
+    <div className="min-h-screen bg-white dark:bg-gray-900 text-gray-900 dark:text-white transition-colors duration-300">
       <section className="relative h-screen flex items-center justify-center overflow-hidden">
         <div 
           className="absolute inset-0 bg-cover bg-center bg-no-repeat"
@@ -40,7 +40,7 @@ export default function Home() {
                 YOUR POWER
               </span>
             </h1>
-            <p className="text-xl md:text-2xl text-gray-300 mb-8 leading-relaxed">
+            <p className="text-xl md:text-2xl text-gray-200 dark:text-gray-300 mb-8 leading-relaxed">
               Premium sportswear engineered for champions. Where performance meets style, and dreams become reality.
             </p>
             <Link to="/products" className="group bg-gradient-to-r from-lime-500 to-orange-500 text-black px-8 py-4 rounded-full text-lg font-bold hover:shadow-2xl hover:shadow-lime-500/30 transition-all duration-300 transform hover:scale-105 inline-flex items-center space-x-2">
@@ -65,7 +65,7 @@ export default function Home() {
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               placeholder="Enter your email"
-              className="flex-1 px-6 py-4 rounded-full text-black placeholder-gray-500 bg-white/90 backdrop-blur-sm border-0 focus:outline-none focus:ring-4 focus:ring-white/50"
+              className="flex-1 px-6 py-4 rounded-full text-black placeholder-gray-600 bg-white/90 backdrop-blur-sm border-0 focus:outline-none focus:ring-4 focus:ring-white/50"
             />
             <button 
               type="submit"

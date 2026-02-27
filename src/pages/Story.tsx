@@ -24,26 +24,26 @@ export default function Story() {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-gray-900 text-white pt-20">
-        <section className="py-20 bg-gray-800">
+      <div className="min-h-screen bg-white dark:bg-gray-900 text-gray-900 dark:text-white pt-20 transition-colors duration-300">
+        <section className="py-20 bg-gray-100 dark:bg-gray-800 transition-colors duration-300">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="text-center mb-16">
               <h1 className="text-4xl md:text-5xl font-bold mb-4">
                 Our <span className="bg-gradient-to-r from-lime-500 to-orange-500 bg-clip-text text-transparent">Story</span>
               </h1>
-              <p className="text-xl text-gray-400">Loading...</p>
+              <p className="text-xl text-gray-600 dark:text-gray-400">Loading...</p>
             </div>
 
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center mb-20">
               <div>
-                <div className="h-10 w-64 bg-gray-700 rounded mb-6 animate-pulse"></div>
+                <div className="h-10 w-64 bg-gray-300 dark:bg-gray-700 rounded mb-6 animate-pulse"></div>
                 <div className="space-y-4">
-                  <div className="h-4 w-full bg-gray-700 rounded animate-pulse"></div>
-                  <div className="h-4 w-full bg-gray-700 rounded animate-pulse"></div>
-                  <div className="h-4 w-5/6 bg-gray-700 rounded animate-pulse"></div>
+                  <div className="h-4 w-full bg-gray-300 dark:bg-gray-700 rounded animate-pulse"></div>
+                  <div className="h-4 w-full bg-gray-300 dark:bg-gray-700 rounded animate-pulse"></div>
+                  <div className="h-4 w-5/6 bg-gray-300 dark:bg-gray-700 rounded animate-pulse"></div>
                 </div>
               </div>
-              <div className="aspect-square rounded-2xl bg-gray-700 animate-pulse"></div>
+              <div className="aspect-square rounded-2xl bg-gray-300 dark:bg-gray-700 animate-pulse"></div>
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
@@ -57,14 +57,14 @@ export default function Story() {
     );
   }
   return (
-    <div className="min-h-screen bg-gray-900 text-white pt-20">
-      <section className="py-20 bg-gray-800">
+    <div className="min-h-screen bg-white dark:bg-gray-900 text-gray-900 dark:text-white pt-20 transition-colors duration-300">
+      <section className="py-20 bg-gray-100 dark:bg-gray-800 transition-colors duration-300">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
             <h1 className="text-4xl md:text-5xl font-bold mb-4">
               Our <span className="bg-gradient-to-r from-lime-500 to-orange-500 bg-clip-text text-transparent">Story</span>
             </h1>
-            <p className="text-xl text-gray-400 max-w-2xl mx-auto">
+            <p className="text-xl text-gray-600 dark:text-gray-400 max-w-2xl mx-auto">
               The journey of passion, innovation, and excellence
             </p>
           </div>
@@ -74,7 +74,7 @@ export default function Story() {
               <h2 className="text-3xl md:text-4xl font-bold mb-6">
                 Born from <span className="bg-gradient-to-r from-lime-500 to-orange-500 bg-clip-text text-transparent">Passion</span>
               </h2>
-              <div className="space-y-6 text-lg text-gray-300 leading-relaxed">
+              <div className="space-y-6 text-lg text-gray-600 dark:text-gray-300 leading-relaxed">
                 <p>
                   Born from the relentless pursuit of excellence, Velocity represents more than just sportswear—we're a movement that believes in pushing boundaries and breaking limits.
                 </p>
@@ -102,28 +102,28 @@ export default function Story() {
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-20">
-            <div className="bg-gray-900/50 backdrop-blur-sm rounded-2xl p-8 text-center">
+            <div className="bg-white/50 dark:bg-gray-900/50 backdrop-blur-sm rounded-2xl p-8 text-center transition-colors duration-300">
               <div className="bg-gradient-to-r from-lime-500 to-orange-500 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
                 <Award className="w-8 h-8 text-black" />
               </div>
               <div className="text-3xl font-bold text-lime-500 mb-2">{stats?.awards.count}</div>
-              <div className="text-gray-400">{stats?.awards.label}</div>
+              <div className="text-gray-600 dark:text-gray-400">{stats?.awards.label}</div>
             </div>
 
-            <div className="bg-gray-900/50 backdrop-blur-sm rounded-2xl p-8 text-center">
+            <div className="bg-white/50 dark:bg-gray-900/50 backdrop-blur-sm rounded-2xl p-8 text-center transition-colors duration-300">
               <div className="bg-gradient-to-r from-orange-500 to-red-500 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
                 <Users className="w-8 h-8 text-black" />
               </div>
               <div className="text-3xl font-bold text-orange-500 mb-2">{stats?.athletes.count}</div>
-              <div className="text-gray-400">{stats?.athletes.label}</div>
+              <div className="text-gray-600 dark:text-gray-400">{stats?.athletes.label}</div>
             </div>
 
-            <div className="bg-gray-900/50 backdrop-blur-sm rounded-2xl p-8 text-center">
+            <div className="bg-white/50 dark:bg-gray-900/50 backdrop-blur-sm rounded-2xl p-8 text-center transition-colors duration-300">
               <div className="bg-gradient-to-r from-red-500 to-pink-500 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
                 <TrendingUp className="w-8 h-8 text-black" />
               </div>
               <div className="text-3xl font-bold text-red-500 mb-2">{stats?.experience.count}</div>
-              <div className="text-gray-400">{stats?.experience.label}</div>
+              <div className="text-gray-600 dark:text-gray-400">{stats?.experience.label}</div>
             </div>
           </div>
 
@@ -145,18 +145,18 @@ export default function Story() {
               <h2 className="text-3xl md:text-4xl font-bold mb-6">
                 Our <span className="bg-gradient-to-r from-lime-500 to-orange-500 bg-clip-text text-transparent">Mission</span>
               </h2>
-              <div className="space-y-6 text-lg text-gray-300 leading-relaxed">
+              <div className="space-y-6 text-lg text-gray-600 dark:text-gray-300 leading-relaxed">
                 <p>
                   At Velocity, our mission is simple yet powerful: to empower every athlete to reach their full potential through innovative design, cutting-edge technology, and unwavering commitment to quality.
                 </p>
                 <p>
                   We believe that everyone is an athlete, whether you're training for the Olympics or taking your first steps toward a healthier lifestyle. Our products are designed to support you at every stage of your journey.
                 </p>
-                <div className="flex items-start space-x-4 bg-gray-900/50 p-6 rounded-xl">
+                <div className="flex items-start space-x-4 bg-white/50 dark:bg-gray-900/50 p-6 rounded-xl transition-colors duration-300">
                   <Heart className="w-8 h-8 text-lime-500 flex-shrink-0 mt-1" />
                   <div>
                     <h3 className="text-xl font-bold mb-2">Sustainability Commitment</h3>
-                    <p className="text-gray-400">
+                    <p className="text-gray-600 dark:text-gray-400">
                       We're dedicated to reducing our environmental impact through sustainable materials and ethical manufacturing practices.
                     </p>
                   </div>
