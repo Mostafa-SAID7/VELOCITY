@@ -52,7 +52,18 @@ export default function Footer() {
         </div>
         
         <div className="border-t border-gray-300 dark:border-gray-800 mt-12 pt-8 flex flex-col md:flex-row justify-between items-center">
-          <p className="text-gray-600 dark:text-gray-400">&copy; 2025 Velocity. All rights reserved.</p>
+          <p className="text-gray-600 dark:text-gray-400">
+            &copy; 2023-{new Date().getFullYear()}{' '}
+            <a 
+              href="https://m-said-portfolio.netlify.app/" 
+              target="_blank" 
+              rel="noopener noreferrer"
+              className="text-lime-500 hover:text-lime-400 font-semibold transition-colors duration-200"
+            >
+              M.Said
+            </a>
+            . All rights reserved.
+          </p>
           <div className="flex space-x-6 mt-4 md:mt-0">
             <Link to="/privacy" className="text-gray-600 dark:text-gray-400 hover:text-lime-500 transition-colors duration-200">Privacy Policy</Link>
             <Link to="/terms" className="text-gray-600 dark:text-gray-400 hover:text-lime-500 transition-colors duration-200">Terms of Service</Link>
