@@ -11,6 +11,9 @@ import Reviews from './pages/Reviews';
 import Cart from './pages/Cart';
 import SignIn from './pages/SignIn';
 import NotFound from './pages/NotFound';
+import Support from './pages/Support';
+import Privacy from './pages/Privacy';
+import Terms from './pages/Terms';
 
 function App() {
   return (
@@ -27,6 +30,10 @@ function App() {
                 <Route path="/reviews" element={<Reviews />} />
                 <Route path="/cart" element={<Cart />} />
                 <Route path="/signin" element={<SignIn />} />
+                <Route path="/support" element={<Support />} />
+                <Route path="/support/:page" element={<Support />} />
+                <Route path="/privacy" element={<Privacy />} />
+                <Route path="/terms" element={<Terms />} />
                 <Route path="*" element={<NotFound />} />
               </Routes>
               <Footer />
