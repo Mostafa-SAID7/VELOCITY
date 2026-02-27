@@ -13,13 +13,13 @@ export default function Dropdown({ value, onChange, options, placeholder, classN
   return (
     <div className={className}>
       {label && (
-        <label className="block text-sm font-semibold mb-2 text-gray-300">{label}</label>
+        <label className="block text-sm font-semibold mb-3 text-gray-300">{label}</label>
       )}
       <div className="relative">
         <select
           value={value}
           onChange={(e) => onChange(e.target.value)}
-          className="w-full bg-gray-800 text-white px-4 py-3 pr-10 rounded-xl border border-gray-700 focus:outline-none focus:ring-2 focus:ring-lime-500 focus:border-transparent transition-all appearance-none cursor-pointer hover:bg-gray-700 hover:border-gray-600"
+          className="w-full bg-gray-800 text-white px-4 py-3 pr-10 rounded-lg border border-gray-700 focus:outline-none focus:ring-2 focus:ring-lime-500 focus:border-transparent transition-all appearance-none cursor-pointer hover:bg-gray-700 hover:border-gray-600 shadow-sm"
           style={{
             backgroundImage: 'none'
           }}
@@ -30,12 +30,14 @@ export default function Dropdown({ value, onChange, options, placeholder, classN
             </option>
           )}
           {options.map((option) => (
-            <option key={option.value} value={option.value} className="bg-gray-800 text-white">
+            <option key={option.value} value={option.value} className="bg-gray-800 text-white py-2">
               {option.label}
             </option>
           ))}
         </select>
-        <ChevronDown className="absolute right-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-lime-500 pointer-events-none transition-transform" />
+        <div className="absolute right-3 top-1/2 transform -translate-y-1/2 pointer-events-none">
+          <ChevronDown className="w-5 h-5 text-lime-500" />
+        </div>
       </div>
     </div>
   );
