@@ -1,0 +1,167 @@
+import React, { useState } from 'react';
+import { Trash2, Plus, Minus, ShoppingBag } from 'lucide-react';
+import { Link } from 'react-router-dom';
+
+interface CartItem {
+  id: number;
+  name: string;
+  price: number;
+  image: string;
+  quantity: number;
+  size: string;
+}
+
+export default function Cart() {
+  const [cartItems, setCartItems] = useState<CartItem[]>([
+    {
+      id: 1,
+      name: "Elite Pro Runner",
+      price: 189,
+      image: "https://images.pexels.com/photos/2529148/pexels-photo-2529148.jpeg?auto=compress&cs=tinysrgb&w=400",
+      quantity: 1,
+      size: "US 10"
+    },
+    {
+      id: 2,
+      name: "Court Dominator",
+      price: 199,
+      image: "https://images.pexels.com/photos/1598505/pexels-photo-1598505.jpeg?auto=compress&cs=tinysrgb&w=400",
+      quantity: 2,
+      size: "US 9.5"
+    }
+  ]);
+
+  const updateQuantity = (id: number, change: number) => {
+    setCartItems(cartItems.map(item => {
+      if (item.id === id) {
+        const newQuantity = Math.max(1, item.quantity + change);
+        return { ...item, quantity: newQuantity };
+      }
+      return item;
+    }));
+  };
+
+  const removeItem = (id: number) => {
+    setCartItems(cartItems.filter(item => item.id !== id));
+  };
+
+  const subtotal = cartItems.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+  const shipping = 15;
+  const tax = subtotal * 0.08;
+  const total = subtotal + shipping + tax;
+
+  if (cartItems.length === 0) {
+    return (
+      <div className="min-h-screen bg-gray-900 text-white pt-20">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20">
+          <div className="text-center">
+            <ShoppingBag className="w-24 h-24 mx-auto mb-6 text-gray-600" />
+            <h1 className="text-4xl font-bold mb-4">Your Cart is Empty</h1>
+            <p className="text-xl text-gray-400 mb-8">Add some amazing products to get started!</p>
+            <Link 
+              to="/products" 
+              className="inline-block bg-gradient-to-r from-lime-500 to-orange-500 text-black px-8 py-4 rounded-full font-bold hover:shadow-lg transition-all duration-300"
+            >
+              Shop Now
+            </Link>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  return (
+    <div className="min-h-screen bg-gray-900 text-white pt-20">
+      <section className="py-20">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <h1 className="text-4xl md:text-5xl font-bold mb-12">
+            Shopping <span className="bg-gradient-to-r from-lime-500 to-orange-500 bg-clip-text text-transparent">Cart</span>
+          </h1>
+
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+            <div className="lg:col-span-2 space-y-4">
+              {cartItems.map((item) => (
+                <div key={item.id} className="bg-gray-800 rounded-2xl p-6 flex items-center gap-6">
+                  <img 
+                    src={item.image} 
+                    alt={item.name}
+                    className="w-24 h-24 object-cover rounded-xl"
+                  />
+                  
+                  <div className="flex-1">
+                    <h3 className="text-xl font-bold mb-2">{item.name}</h3>
+                    <p className="text-gray-400 mb-2">Size: {item.size}</p>
+                    <p className="text-2xl font-bold text-orange-500">${item.price}</p>
+                  </div>
+
+                  <div className="flex items-center gap-4">
+                    <div className="flex items-center bg-gray-700 rounded-full">
+                      <button 
+                        onClick={() => updateQuantity(item.id, -1)}
+                        className="p-2 hover:bg-gray-600 rounded-full transition-colors"
+                      >
+                        <Minus className="w-4 h-4" />
+                      </button>
+                      <span className="px-4 font-bold">{item.quantity}</span>
+                      <button 
+                        onClick={() => updateQuantity(item.id, 1)}
+                        className="p-2 hover:bg-gray-600 rounded-full transition-colors"
+                      >
+                        <Plus className="w-4 h-4" />
+                      </button>
+                    </div>
+
+                    <button 
+                      onClick={() => removeItem(item.id)}
+                      className="p-2 hover:bg-red-500/20 rounded-full transition-colors text-red-500"
+                    >
+                      <Trash2 className="w-5 h-5" />
+                    </button>
+                  </div>
+                </div>
+              ))}
+            </div>
+
+            <div className="lg:col-span-1">
+              <div className="bg-gray-800 rounded-2xl p-6 sticky top-24">
+                <h2 className="text-2xl font-bold mb-6">Order Summary</h2>
+                
+                <div className="space-y-4 mb-6">
+                  <div className="flex justify-between text-gray-400">
+                    <span>Subtotal</span>
+                    <span>${subtotal.toFixed(2)}</span>
+                  </div>
+                  <div className="flex justify-between text-gray-400">
+                    <span>Shipping</span>
+                    <span>${shipping.toFixed(2)}</span>
+                  </div>
+                  <div className="flex justify-between text-gray-400">
+                    <span>Tax</span>
+                    <span>${tax.toFixed(2)}</span>
+                  </div>
+                  <div className="border-t border-gray-700 pt-4">
+                    <div className="flex justify-between text-xl font-bold">
+                      <span>Total</span>
+                      <span className="text-lime-500">${total.toFixed(2)}</span>
+                    </div>
+                  </div>
+                </div>
+
+                <button className="w-full bg-gradient-to-r from-lime-500 to-orange-500 text-black py-4 rounded-full font-bold hover:shadow-lg hover:shadow-lime-500/25 transition-all duration-300 mb-4">
+                  Proceed to Checkout
+                </button>
+
+                <Link 
+                  to="/products"
+                  className="block text-center text-lime-500 hover:text-lime-400 transition-colors"
+                >
+                  Continue Shopping
+                </Link>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+    </div>
+  );
+}
