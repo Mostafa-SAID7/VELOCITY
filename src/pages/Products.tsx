@@ -23,7 +23,7 @@ export default function Products() {
   const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
   const [selectedSize, setSelectedSize] = useState('');
   const [showNotification, setShowNotification] = useState(false);
-  const itemsPerPage = 8;
+  const itemsPerPage = 6;
 
   const { addToCart } = useCart();
 
