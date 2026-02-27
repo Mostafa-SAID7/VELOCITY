@@ -32,16 +32,49 @@ export default function Cart() {
     return (
       <div className="min-h-screen bg-white dark:bg-gray-900 text-gray-900 dark:text-white pt-20 transition-colors duration-300">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20">
-          <div className="text-center">
-            <ShoppingBag className="w-24 h-24 mx-auto mb-6 text-gray-400 dark:text-gray-600" />
-            <h1 className="text-4xl font-bold mb-4">Your Cart is Empty</h1>
-            <p className="text-xl text-gray-600 dark:text-gray-400 mb-8">Add some amazing products to get started!</p>
+          <div className="text-center max-w-2xl mx-auto">
+            {/* Animated Shopping Bag Icon */}
+            <div className="relative inline-block mb-8 animate-scale-in">
+              <div className="absolute inset-0 bg-gradient-to-r from-lime-500/20 to-orange-500/20 rounded-full blur-3xl animate-pulse"></div>
+              <div className="relative bg-gray-100 dark:bg-gray-800 rounded-full p-8 transition-colors duration-300">
+                <ShoppingBag className="w-24 h-24 mx-auto text-gray-400 dark:text-gray-600 animate-bounce" strokeWidth={1.5} />
+              </div>
+            </div>
+
+            {/* Title with gradient */}
+            <h1 className="text-5xl md:text-6xl font-bold mb-6 animate-fade-in">
+              Your Cart is <span className="bg-gradient-to-r from-lime-500 to-orange-500 bg-clip-text text-transparent">Empty</span>
+            </h1>
+            
+            {/* Description */}
+            <p className="text-xl md:text-2xl text-gray-600 dark:text-gray-400 mb-12 animate-slide-up leading-relaxed">
+              Add some amazing products to get started!
+            </p>
+
+            {/* CTA Button with hover effect */}
             <Link 
               to="/products" 
-              className="inline-block bg-gradient-to-r from-lime-500 to-orange-500 text-black px-8 py-4 rounded-full font-bold hover:shadow-lg transition-all duration-300"
+              className="group inline-flex items-center gap-3 bg-gradient-to-r from-lime-500 to-orange-500 text-black px-10 py-5 rounded-full font-bold text-lg hover:shadow-2xl hover:shadow-lime-500/30 transition-all duration-300 transform hover:scale-105 animate-slide-up"
             >
-              Shop Now
+              <ShoppingBag className="w-6 h-6 group-hover:rotate-12 transition-transform duration-300" />
+              <span>Start Shopping</span>
             </Link>
+
+            {/* Decorative elements */}
+            <div className="mt-16 grid grid-cols-3 gap-6 opacity-50">
+              <div className="bg-gray-100 dark:bg-gray-800 rounded-2xl p-6 animate-fade-in transition-colors duration-300" style={{ animationDelay: '0.1s' }}>
+                <div className="text-3xl mb-2">🎯</div>
+                <p className="text-sm text-gray-600 dark:text-gray-400">Premium Quality</p>
+              </div>
+              <div className="bg-gray-100 dark:bg-gray-800 rounded-2xl p-6 animate-fade-in transition-colors duration-300" style={{ animationDelay: '0.2s' }}>
+                <div className="text-3xl mb-2">🚀</div>
+                <p className="text-sm text-gray-600 dark:text-gray-400">Fast Shipping</p>
+              </div>
+              <div className="bg-gray-100 dark:bg-gray-800 rounded-2xl p-6 animate-fade-in transition-colors duration-300" style={{ animationDelay: '0.3s' }}>
+                <div className="text-3xl mb-2">💯</div>
+                <p className="text-sm text-gray-600 dark:text-gray-400">Best Prices</p>
+              </div>
+            </div>
           </div>
         </div>
       </div>
@@ -68,23 +101,23 @@ export default function Cart() {
                   
                   <div className="flex-1">
                     <h3 className="text-xl font-bold mb-2">{item.name}</h3>
-                    <p className="text-gray-400 mb-1">Size: {item.size}</p>
+                    <p className="text-gray-600 dark:text-gray-400 mb-1">Size: {item.size}</p>
                     <p className="text-sm text-lime-500 mb-2">{item.category}</p>
                     <p className="text-2xl font-bold text-orange-500">${item.price}</p>
                   </div>
 
                   <div className="flex items-center gap-4">
-                    <div className="flex items-center bg-gray-700 rounded-full">
+                    <div className="flex items-center bg-gray-200 dark:bg-gray-700 rounded-full transition-colors duration-300">
                       <button 
                         onClick={() => handleUpdateQuantity(item.id, item.quantity - 1)}
-                        className="p-2 hover:bg-gray-600 rounded-full transition-colors"
+                        className="p-2 hover:bg-gray-300 dark:hover:bg-gray-600 rounded-full transition-colors"
                       >
                         <Minus className="w-4 h-4" />
                       </button>
                       <span className="px-4 font-bold">{item.quantity}</span>
                       <button 
                         onClick={() => handleUpdateQuantity(item.id, item.quantity + 1)}
-                        className="p-2 hover:bg-gray-600 rounded-full transition-colors"
+                        className="p-2 hover:bg-gray-300 dark:hover:bg-gray-600 rounded-full transition-colors"
                       >
                         <Plus className="w-4 h-4" />
                       </button>
