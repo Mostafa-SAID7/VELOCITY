@@ -17,7 +17,7 @@ function App() {
       <ToastProvider>
         <CartProvider>
           <Router>
-            <div className="min-h-screen bg-gray-900 dark:bg-gray-900 light:bg-white text-white dark:text-white light:text-gray-900 transition-colors duration-300">
+            <div className="min-h-screen bg-white dark:bg-gray-900 text-gray-900 dark:text-white transition-colors duration-300">
               <Navbar />
               <Routes>
                 <Route path="/" element={<Home />} />
