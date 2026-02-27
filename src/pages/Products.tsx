@@ -1,4 +1,5 @@
 import { useState, useMemo, useEffect } from 'react';
+import { useSearchParams } from 'react-router-dom';
 import { Search, SlidersHorizontal, Grid, List, ChevronLeft, ChevronRight, X } from 'lucide-react';
 import { useCart } from '../context/CartContext';
 import { useToast } from '../context/ToastContext';
@@ -8,8 +9,11 @@ import { ProductCardSkeleton } from '../components/Skeleton';
 import { getProducts, getCategories, getSizes, Product as ProductType } from '../services/api';
 
 export default function Products() {
+  const [searchParams] = useSearchParams();
+  const categoryParam = searchParams.get('category');
+  
   const [searchQuery, setSearchQuery] = useState('');
-  const [selectedCategory, setSelectedCategory] = useState('All');
+  const [selectedCategory, setSelectedCategory] = useState(categoryParam || 'All');
   const [priceRange, setPriceRange] = useState<[number, number]>([0, 300]);
   const [sortBy, setSortBy] = useState('featured');
   const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid');
@@ -26,6 +30,13 @@ export default function Products() {
 
   const { addToCart } = useCart();
   const toast = useToast();
+
+  // Update category when URL parameter changes
+  useEffect(() => {
+    if (categoryParam && categories.includes(categoryParam)) {
+      setSelectedCategory(categoryParam);
+    }
+  }, [categoryParam, categories]);
 
   // Fetch data on mount
   useEffect(() => {

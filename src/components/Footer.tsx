@@ -33,10 +33,10 @@ export default function Footer() {
             <h4 className="text-gray-900 dark:text-white font-bold text-lg mb-4">Products</h4>
             <ul className="space-y-3 text-gray-600 dark:text-gray-400">
               <li><Link to="/products" className="hover:text-lime-500 transition-colors duration-200">All Products</Link></li>
-              <li><Link to="/products" className="hover:text-lime-500 transition-colors duration-200">Running Shoes</Link></li>
-              <li><Link to="/products" className="hover:text-lime-500 transition-colors duration-200">Training Gear</Link></li>
-              <li><Link to="/products" className="hover:text-lime-500 transition-colors duration-200">Basketball</Link></li>
-              <li><Link to="/products" className="hover:text-lime-500 transition-colors duration-200">Lifestyle</Link></li>
+              <li><Link to="/products?category=Running" className="hover:text-lime-500 transition-colors duration-200">Running Shoes</Link></li>
+              <li><Link to="/products?category=Training" className="hover:text-lime-500 transition-colors duration-200">Training Gear</Link></li>
+              <li><Link to="/products?category=Basketball" className="hover:text-lime-500 transition-colors duration-200">Basketball</Link></li>
+              <li><Link to="/products?category=Lifestyle" className="hover:text-lime-500 transition-colors duration-200">Lifestyle</Link></li>
             </ul>
           </div>
           
