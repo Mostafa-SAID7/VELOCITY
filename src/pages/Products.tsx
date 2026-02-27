@@ -1,7 +1,7 @@
 import { useState, useMemo } from 'react';
 import { Search, SlidersHorizontal, Grid, List, ChevronLeft, ChevronRight, X, Check } from 'lucide-react';
 import { useCart } from '../context/CartContext';
-import Dropdown from '../components/Dropdown';
+import CustomDropdown from '../components/CustomDropdown';
 import Input from '../components/Input';
 
 interface Product {
@@ -410,7 +410,7 @@ export default function Products() {
 
                 {/* Sort By */}
                 <div>
-                  <Dropdown
+                  <CustomDropdown
                     label="Sort By"
                     value={sortBy}
                     onChange={setSortBy}
